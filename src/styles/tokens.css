@@ -1,0 +1,37 @@
+/* CSS-переменные палитры — дублирует globals.css для ясности */
+
+:root {
+  /* Цвета — светлая тема */
+  --color-bg: #FAFAF8;
+  --color-surface: #F5EFE7;
+  --color-accent: #7B4F32;
+  --color-text: #4A2D1E;
+  --color-muted: #9C7E6A;
+  --color-border: #D9C4AE;
+
+  /* Шрифты */
+  --font-serif: 'Playfair Display', serif;
+  --font-sans: 'Inter', sans-serif;
+
+  /* Размеры */
+  --radius-card: 12px;
+  --radius-btn: 8px;
+
+  /* Тени */
+  --shadow-card: 0 2px 12px rgba(74, 45, 30, 0.08);
+  --shadow-card-hover: 0 8px 24px rgba(74, 45, 30, 0.14);
+}
+
+.dark {
+  /* Цвета — тёмная тема */
+  --color-bg: #1A1410;
+  --color-surface: #2E1F14;
+  --color-accent: #C87E45;
+  --color-text: #F5D0A9;
+  --color-muted: #A08060;
+  --color-border: #4A3020;
+  --color-cta: #E8875A;
+
+  --shadow-card: 0 2px 12px rgba(0, 0, 0, 0.3);
+  --shadow-card-hover: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
