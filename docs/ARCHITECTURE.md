@@ -10,6 +10,7 @@ portfolio/
 │   │   ├── layout.jsx        ← meta, шрифты Google, ThemeProvider
 │   │   └── globals.css       ← CSS-переменные палитры, базовые стили
 │   ├── components/
+│   │   ├── ScrollToTop.jsx          ← скролл вверх при F5
 │   │   ├── sections/
 │   │   │   ├── IntroSection.jsx     ← интро: пилюля + фото + About (client)
 │   │   │   ├── AboutSection.jsx     ← AboutContent (glass-карточка)
@@ -48,26 +49,31 @@ portfolio/
 
 ## Компоненты — подробное описание
 
-### `IntroSection.jsx` (client)
-**Ответственность:** весь интро-блок — пилюля, фото, секция «Обо мне».
-**Пилюля «Золотарёва Татьяна»:** три режима (`natural` | `fixed` | `floating`), переключение по scroll + `#about.getBoundingClientRect().top`.
-**Фото:** sticky (`intro-photo`), mask-gradient снизу.
-**Стекло пилюли:** `.intro-header__glass.glass-text-contrast` — см. `globals.css`.
+### `IntroSection.jsx` (client) — шапка ✅
+**Ответственность:** пилюля, sticky-фото, обёртка `#about` для `AboutContent`.
+**Пилюля:** `natural` (scroll=0) → `fixed` (scroll>0). Позиция `top` через `getFixedTop(aboutTop)`:
+- `aboutTop >= 88px` → `top: 16px` (прилипла)
+- зона 88→16px → линейная интерполяция (отлипание 1:1 со скроллом)
+- `aboutTop <= 16px` → `top: aboutTop` (едет с секцией, без режима `floating`)
+**Фото:** `.intro-photo` sticky + mask-gradient.
 
-### `AboutSection.jsx` → `AboutContent`
-**Ответственность:** текст «Обо мне» внутри glass-карточки (без своей `<section>`).
-**Стекло:** `<div class="glass-panel glass-text-contrast">` — не на `motion.div` с transform.
-**Анимация:** обёртка только `opacity`; абзацы — stagger `fadeUp`.
-**CTA:** Telegram + якорь `#cases` (данные из `siteData`).
+### `AboutSection.jsx` → `AboutContent` — блок «Обо мне» ✅
+**Ответственность:** glass-карточка с текстом (без `<section>`, section — в `IntroSection`).
+**Типографика:** заголовок `.glass-panel__title` (Playfair italic, крупный); абзацы `.glass-ios-text` (как пилюля).
+**Анимация:** fade обёртки по `opacity`; абзацы — stagger. CTA убраны (будут позже).
 
-### Стили стекла (`globals.css`)
+### Стили стекла (`globals.css`) — iOS frosted glass
 | Класс | Назначение |
 |-------|------------|
-| `.intro-header__glass` | Пилюля, заливка ~28% white |
-| `.glass-panel` | Карточка «Обо мне», заливка ~32% white |
-| `.glass-text-contrast` | Цвет текста + text-shadow для читаемости на фото |
-| `.glass-accent` | Акцентные подписи внутри стекла |
-| Общее | `backdrop-filter: blur(4px) saturate(1.15)` |
+| `.intro-header__glass` | Пилюля |
+| `.glass-panel` | Карточка «Обо мне» |
+| `.glass-text-contrast` | Контраст текста на фото |
+| `.glass-ios-text` | SF Pro / system, 18–21px, weight 600 |
+| `.glass-panel__title` | Крупный italic заголовок |
+| Общее | `blur(28px) saturate(185%)`, градиентный блик `::before` |
+
+### `ScrollToTop.jsx`
+**Ответственность:** `history.scrollRestoration = 'manual'` + `scrollTo(0)` при загрузке; inline-script в `layout.jsx` до гидратации.
 
 ### `ServicesSection.jsx`
 **Ответственность:** 4 услуги в виде карточек.

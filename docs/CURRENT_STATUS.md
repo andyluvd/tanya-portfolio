@@ -1,9 +1,9 @@
 # Current Status
 
 ## Текущий этап
-**Этап 3–4 — Полировка секций** (в работе 🔧)
+**Этап 2 — Шапка + «Обо мне»** (готово ✅) → далее контент и остальные секции
 
-Интро: фото на всю ширину, стеклянная пилюля, карточка «Обо мне» с настоящим glassmorphism (фото просвечивает). Секции Services/Skills отполированы. Задеплоено на VDS.
+Шапка (пилюля «Золотарёва Татьяна») и стеклянный блок «Обо мне» полностью отполированы и задеплоены на VDS.
 
 ---
 
@@ -11,36 +11,37 @@
 
 ### Этап 1 — Фундамент ✅
 - Next.js 15, React 19, Tailwind CSS 3, Framer Motion 11
-- Все секции и UI-компоненты созданы
 - CSS-переменные палитры, шрифты Playfair Display + Inter
 - `npm run build` — успешно
 
-### Этап 2 — Hero + About ✅
-- **Фото** (`public/photo.jpg`): sticky, нижний край через CSS mask
-- **Пилюля «Золотарёва Татьяна»** — JS state machine в `IntroSection.jsx` (natural → fixed → floating)
-- **Блок «Обо мне»** — стеклянная карточка `.glass-panel` + контраст текста `.glass-text-contrast`
-- **Стекло (финальные параметры в `globals.css`):**
-  - `backdrop-filter: blur(4px)` — слабое размытие фото под элементом
-  - Заливка: пилюля `rgba(255,255,255,0.28)`, карточка `0.32` (тёмная тема ~0.38–0.42)
-  - Контраст текста: класс `.glass-text-contrast` (тёмный цвет + многослойный `text-shadow`), без изменения заливки
-  - **Важно:** `backdrop-filter` на отдельном `<div>`, не на `motion.div` с `transform` — иначе стекло не работает
-- CTA в карточке: Telegram + «Посмотреть кейсы»
-- **Navbar** убран; тема — в Footer
-- Удалены неиспользуемые: `HeroSection.jsx`, `IntroHeader.jsx`
+### Этап 2 — Шапка + «Обо мне» ✅ (ГОТОВО)
+- **Фото** (`public/photo.jpg`): sticky, mask-gradient снизу
+- **Пилюля «Золотарёва Татьяна»** (`IntroSection.jsx`):
+  - Режимы: `natural` (scroll=0) → `fixed` (скролл > 0)
+  - Прилипание: `top: 16px` над фото
+  - **Плавное отлипание** к блоку «Обо мне»: зона `HANDOFF_START` (88px) → интерполяция `top` 1:1 со скроллом; в конце `top = aboutTop` без режима `floating` (нет рывка вёрстки)
+  - Типографика iOS: `.glass-ios-text` (SF Pro / system), жирность 700, контраст `.glass-text-contrast`
+- **Блок «Обо мне»** (`AboutSection.jsx` → `AboutContent`):
+  - iOS frosted glass: `.glass-panel` (`blur(28px) saturate(185%)`, градиентный блик)
+  - Заголовок: Playfair italic, крупный (`glass-panel__title`)
+  - Текст абзацев: тот же стиль, что пилюля (`.glass-ios-text`)
+  - CTA-кнопки убраны (будут позже, другой вид)
+- **Стекло:** `backdrop-filter` на отдельном `<div>`, не на `motion.div` с `transform`
+- **ScrollToTop** — страница открывается с верха после F5
+- Navbar убран; тема в Footer
+- Удалены: `HeroSection.jsx`, `IntroHeader.jsx`
 
 ### Этап 3 — Services + Skills (полировка) ✅
-- `ServiceCard`: иконки Target / TrendingUp / Clapperboard / Palette, hover с accent-line
-- `SkillsSection`: Figma SVG, Adobe-бейджи (Ai, Ps, Pr), CapCut
+- `ServiceCard`: Target / TrendingUp / Clapperboard / Palette + hover
+- `SkillsSection`: Figma, Adobe-бейджи, CapCut
 
-### Этап 4 — Cases ✅
+### Этап 4 — Cases (частично) ✅
 - `MetricCounter` + `CasesSection`
-- Нужно: `public/cases/lightstar-analytics.png`
+- [ ] `public/cases/lightstar-analytics.png`
 
 ### Этап 5 — Contact + Деплой (частично) ✅
-- `ContactSection` (кнопки + форма)
-- GitHub: https://github.com/andyluvd/tanya-portfolio
-- VDS: http://109.172.94.218/ (SSH: `vds-portfolio`)
-- Нужно: ключи EmailJS, тест формы
+- `ContactSection`, VDS: http://109.172.94.218/
+- [ ] EmailJS ключи, тест формы
 
 ---
 
@@ -49,36 +50,23 @@
 ```
 src/
 ├── app/
-│   ├── page.jsx          ← IntroSection, Services, Cases, Skills, Contact
-│   ├── layout.jsx        ← ThemeProviders, Footer
-│   └── globals.css       ← палитра, .intro-*, .glass-panel, .glass-text-contrast
+│   ├── page.jsx
+│   ├── layout.jsx        ← ScrollToTop, шрифты
+│   └── globals.css       ← .glass-*, .intro-*, iOS glass
 ├── components/
+│   ├── ScrollToTop.jsx
 │   ├── sections/
-│   │   ├── IntroSection.jsx     ← CLIENT: пилюля + фото + About
-│   │   ├── AboutSection.jsx     ← AboutContent (glass-panel внутри)
+│   │   ├── IntroSection.jsx     ← пилюля + фото + #about
+│   │   ├── AboutSection.jsx     ← glass «Обо мне»
 │   │   ├── ServicesSection.jsx
 │   │   ├── CasesSection.jsx
 │   │   ├── SkillsSection.jsx
 │   │   └── ContactSection.jsx
-│   ├── ui/
-│   │   ├── ServiceCard.jsx
-│   │   ├── MetricCounter.jsx
-│   │   ├── AnimatedSection.jsx
-│   │   └── ThemeToggle.jsx
-│   ├── layout/
-│   │   ├── Footer.jsx
-│   │   └── FooterThemeToggle.jsx
-│   └── providers/
-│       └── ThemeProviders.jsx
-├── lib/
-│   ├── utils.js
-│   └── emailjs.js               ← ЗАПОЛНИТЬ ключи!
-└── content/
-    └── data.js
-public/
-├── photo.jpg                    ✅
-└── cases/
-    └── lightstar-analytics.png  ← НЕ ЗАГРУЖЕНО
+│   ├── ui/ …
+│   ├── layout/Footer.jsx
+│   └── providers/ThemeProviders.jsx
+├── lib/ …
+└── content/data.js
 ```
 
 ---
@@ -87,11 +75,9 @@ public/
 
 | Среда | Адрес |
 |-------|-------|
-| Локально | `npm run dev` → http://localhost:3000 |
 | VDS | http://109.172.94.218/ |
 | GitHub | https://github.com/andyluvd/tanya-portfolio |
 
-**Сборка и деплой на VDS:**
 ```bash
 export PATH="/Users/andre/ОФЛАЙН/1project/.tools/node/bin:$PATH"
 npm run build && rsync -avz --delete out/ vds-portfolio:/var/www/tanya/
@@ -100,41 +86,34 @@ npm run build && rsync -avz --delete out/ vds-portfolio:/var/www/tanya/
 **Точки отката (git):**
 | Хеш | Описание |
 |-----|----------|
-| `35f0684` | Пилюля JS state machine |
-| `c73200e` | ✅ ТЕКУЩИЙ: стекло intro, полировка секций, docs |
+| `c73200e` | Стекло intro v1, полировка секций |
+| *(после коммита)* | ✅ Шапка + «Обо мне» готовы |
 
 ---
 
 ## Что делать дальше
 
-### Приоритет 1 — Контент и медиа
-- [ ] `public/cases/lightstar-analytics.png`
-- [ ] EmailJS ключи в `src/lib/emailjs.js`
-- [ ] Проверить форму контактов
+### Приоритет 1 — Контент
+- [ ] `lightstar-analytics.png`
+- [ ] EmailJS
 
-### Приоритет 2 — Доработка секций
-- [x] ServicesSection ✅
-- [x] SkillsSection ✅
-- [x] AboutSection CTA ✅
-- [x] Glassmorphism пилюля + «Обо мне» ✅
+### Приоритет 2 — Секции
 - [ ] CasesSection: скриншот
+- [ ] CTA в «Обо мне» (новый дизайн, позже)
 
-### Приоритет 3 — Финальная полировка
-- [x] CSS-переменные + тёмная тема ✅
+### Приоритет 3 — Полировка
 - [ ] Адаптивность на телефоне
-- [ ] SEO (базово в layout.jsx)
 - [ ] Vercel (опционально)
 
 ---
 
 ## Известные решения
 
-- Пилюля: `IntroSection.jsx`, состояния через `getBoundingClientRect()` на `#about`
-- `AboutContent` без `<section>` — обёртка в `IntroSection`
-- Стекло: `.intro-header__glass` + `.glass-panel` + `.glass-text-contrast` в `globals.css`
-- Framer Motion на glass: только `opacity` на обёртке, не `translateY` на элементе со стеклом
-- `output: 'export'` в `next.config.js`
-- `npm run dev:clean` — dev с очисткой `.next`
+- Пилюля: `getFixedTop(aboutTop)` — отлипание без `floating`
+- `HANDOFF_START = 88`, `STICK_TOP = 16`
+- Стекло: `.intro-header__glass`, `.glass-panel`, `.glass-text-contrast`, `.glass-ios-text`
+- `AboutContent` без `<section>` — `#about` в `IntroSection`
+- `ScrollToTop` + `history.scrollRestoration = 'manual'`
 
 ## Баги и блокеры
 - Переключатель темы только в Footer

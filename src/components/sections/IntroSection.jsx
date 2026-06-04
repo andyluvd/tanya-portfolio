@@ -5,30 +5,36 @@ import Image from 'next/image'
 import AboutContent from './AboutSection'
 
 /*
-  Три состояния пилюли «Золотарёва Татьяна»:
+  Два режима + плавное отлипание без скачка в конце:
 
-  1. natural   — в потоке, ВЫШЕ фото (y≈16px), фото начинается ниже
-  2. fixed     — position:fixed top:16px, пока скролл идёт над фото
-  3. floating  — в потоке ВНУТРИ блока «Обо мне», уезжает вместе с ним
+  1. natural — в потоке (scroll = 0)
+  2. fixed   — position: fixed; top от 16px до aboutTop (1:1 со скроллом)
 
-  Переход 2→3 происходит когда верх блока #about достигает y=16px
-  (pill был там же) — склейка без прыжка.
+  Отлипание: пока #about ближе HANDOFF_START → top плавно смещается к верху секции.
+  В конце не переключаемся в floating (иначе рывок из-за вставки в поток #about).
 */
 
-const TOP = 16 // px = 1rem
+const STICK_TOP = 16
+const HANDOFF_START = 88
+
+function getFixedTop(aboutTop) {
+  if (aboutTop >= HANDOFF_START) return STICK_TOP
+  if (aboutTop <= STICK_TOP) return aboutTop
+  const t = (HANDOFF_START - aboutTop) / (HANDOFF_START - STICK_TOP)
+  return STICK_TOP + t * (aboutTop - STICK_TOP)
+}
 
 function GlassPill() {
   return (
-    <div className="intro-header">
-      <div className="intro-header__glass glass-text-contrast font-serif text-base sm:text-lg tracking-wide whitespace-nowrap">
-        Золотарёва Татьяна
-      </div>
+    <div className="intro-header__glass glass-text-contrast glass-ios-text whitespace-nowrap">
+      Золотарёва Татьяна
     </div>
   )
 }
 
 export default function IntroSection() {
   const [mode, setMode] = useState('natural')
+  const [fixedTop, setFixedTop] = useState(STICK_TOP)
 
   useEffect(() => {
     const onScroll = () => {
@@ -37,14 +43,10 @@ export default function IntroSection() {
 
       const aboutTop = about.getBoundingClientRect().top
 
-      if (aboutTop <= TOP) {
-        // About section поднялся до уровня пилюли → уходим вместе
-        setMode('floating')
-      } else if (window.scrollY > 0) {
-        // Страница прокручена, пилюля прилипла к верху
+      if (window.scrollY > 0) {
         setMode('fixed')
+        setFixedTop(getFixedTop(aboutTop))
       } else {
-        // Начало страницы
         setMode('natural')
       }
     }
@@ -56,31 +58,23 @@ export default function IntroSection() {
 
   return (
     <div className="relative">
-
-      {/*
-        ① NATURAL — в потоке выше фото.
-        Placeholder всегда присутствует (visibility:hidden), чтобы
-        фото не прыгало вверх когда пилюля уходит в fixed.
-      */}
       <div
+        className="intro-header intro-header--natural"
         style={{ visibility: mode === 'natural' ? 'visible' : 'hidden' }}
         aria-hidden={mode !== 'natural'}
       >
         <GlassPill />
       </div>
 
-      {/*
-        ② FIXED — прилипла к верху, фото под ней
-      */}
       {mode === 'fixed' && (
-        <div className="intro-header intro-header--fixed">
-          <div className="intro-header__glass glass-text-contrast font-serif text-base sm:text-lg tracking-wide whitespace-nowrap">
-            Золотарёва Татьяна
-          </div>
+        <div
+          className="intro-header intro-header--fixed"
+          style={{ top: fixedTop }}
+        >
+          <GlassPill />
         </div>
       )}
 
-      {/* Фото: sticky, за пилюлей */}
       <div className="intro-photo">
         <Image
           src="/photo.jpg"
@@ -93,16 +87,9 @@ export default function IntroSection() {
         />
       </div>
 
-      {/*
-        Блок «Обо мне»: id="about" нужен для расчёта позиции.
-        ③ FLOATING — пилюля рендерится первым дочерним элементом
-           и уезжает с блоком вверх.
-      */}
       <section id="about" className="intro-about-wrap">
-        {mode === 'floating' && <GlassPill />}
         <AboutContent />
       </section>
-
     </div>
   )
 }

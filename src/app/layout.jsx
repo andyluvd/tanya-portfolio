@@ -1,11 +1,14 @@
 import { Playfair_Display, Inter } from 'next/font/google'
 import ThemeProviders from '@/components/providers/ThemeProviders'
 import Footer from '@/components/layout/Footer'
+import ScrollToTop from '@/components/ScrollToTop'
 import './globals.css'
 
 const playfair = Playfair_Display({
   subsets: ['latin', 'cyrillic'],
   variable: '--font-serif',
+  weight: ['400', '600'],
+  style: ['normal', 'italic'],
   display: 'swap',
 })
 
@@ -32,7 +35,13 @@ export default function RootLayout({ children }) {
   return (
     <html lang="ru" suppressHydrationWarning>
       <body className={`${playfair.variable} ${inter.variable}`}>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){if('scrollRestoration' in history)history.scrollRestoration='manual';window.scrollTo(0,0);})();`,
+          }}
+        />
         <ThemeProviders>
+          <ScrollToTop />
           <main>{children}</main>
           <Footer />
         </ThemeProviders>

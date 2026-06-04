@@ -10,6 +10,9 @@
   --color-muted: #9C7E6A;
   --color-border: #D9C4AE;
   --color-cta: #7B4F32;
+  /* SF Pro на Apple, Inter/system-ui на остальных */
+  --font-ios: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Display',
+    var(--font-sans), system-ui, sans-serif;
 }
 
 .dark {
@@ -79,10 +82,9 @@ body {
   z-index: 20;
 }
 
-/* Состояние fixed: прилипает к верху при скролле над фото */
+/* ② FIXED — top задаётся в JS (16px или плавное отлипание к #about) */
 .intro-header--fixed {
   position: fixed;
-  top: 16px;
   left: 0;
   right: 0;
   z-index: 50;
@@ -91,37 +93,82 @@ body {
   padding: 0 1.25rem;
   pointer-events: none;
 }
-.intro-header--fixed > * {
+
+.intro-header--fixed .intro-header__glass {
   pointer-events: auto;
 }
 
 /*
-  Стекло: почти прозрачная заливка + слабое размытие фото под элементом.
-  blur(4px) — заметно слабее прежних 20–24px.
+  ③ FLOATING — в #about.
+  padding-top: 0 чтобы при aboutTop=16px пилюля совпала с fixed (top:16px) без скачка.
+*/
+.intro-header--floating {
+  position: relative;
+  z-index: 20;
+  padding-top: 0;
+  padding-bottom: 0.5rem;
+}
+
+/*
+  iOS-style frosted glass (vibrancy):
+  сильный blur + saturate, градиентный блик, тонкое «кольцо», inset-highlight.
 */
 .intro-header__glass,
 .glass-panel {
+  font-family: var(--font-ios);
+  font-feature-settings: 'kern' 1, 'liga' 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   position: relative;
+  overflow: hidden;
   isolation: isolate;
-  backdrop-filter: blur(4px) saturate(1.15);
-  -webkit-backdrop-filter: blur(4px) saturate(1.15);
+  border: 0.5px solid rgba(255, 255, 255, 0.42);
+  -webkit-backdrop-filter: blur(28px) saturate(185%) brightness(1.08);
+  backdrop-filter: blur(28px) saturate(185%) brightness(1.08);
+  box-shadow:
+    0 0 0 0.5px rgba(255, 255, 255, 0.28),
+    0 8px 28px rgba(74, 45, 30, 0.1),
+    inset 0 1px 1px rgba(255, 255, 255, 0.72),
+    inset 0 -0.5px 0 rgba(255, 255, 255, 0.18);
 }
 
-/* Контраст текста на фото — только тень и цвет, заливку не трогаем */
+/* Верхний блик как на iOS (specular) */
+.intro-header__glass::before,
+.glass-panel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(
+    168deg,
+    rgba(255, 255, 255, 0.62) 0%,
+    rgba(255, 255, 255, 0.14) 38%,
+    rgba(255, 255, 255, 0.04) 52%,
+    rgba(255, 255, 255, 0) 62%
+  );
+  z-index: 0;
+}
+
+.intro-header__glass > *,
+.glass-panel > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Контраст текста на фото */
 .glass-text-contrast {
   color: #2a1810;
   text-shadow:
-    0 0 1px rgba(255, 255, 255, 1),
-    0 1px 3px rgba(255, 255, 255, 0.95),
-    0 2px 10px rgba(255, 255, 255, 0.75);
+    0 0 1px rgba(255, 255, 255, 0.95),
+    0 1px 2px rgba(255, 255, 255, 0.85);
 }
 
 .dark .glass-text-contrast {
   color: #fff4e8;
   text-shadow:
-    0 0 1px rgba(0, 0, 0, 0.9),
-    0 1px 4px rgba(0, 0, 0, 0.75),
-    0 2px 12px rgba(0, 0, 0, 0.55);
+    0 0 1px rgba(0, 0, 0, 0.85),
+    0 1px 3px rgba(0, 0, 0, 0.65);
 }
 
 /* Пилюля «Золотарёва Татьяна» */
@@ -129,48 +176,130 @@ body {
   display: inline-block;
   padding: 0.7rem 1.75rem;
   text-align: center;
-  background: rgba(255, 255, 255, 0.28);
-  border: 1px solid rgba(255, 255, 255, 0.45);
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.38) 0%,
+    rgba(255, 255, 255, 0.14) 48%,
+    rgba(255, 255, 255, 0.22) 100%
+  );
   border-radius: 9999px;
-  box-shadow: 0 4px 16px rgba(74, 45, 30, 0.08);
+}
+
+/* Типографика iOS — пилюля и текст в карточке «Обо мне» */
+.glass-ios-text {
+  font-size: 1.125rem;
+  font-weight: 600;
+  letter-spacing: -0.024em;
+  line-height: 1.35;
+}
+
+@media (min-width: 640px) {
+  .glass-ios-text {
+    font-size: 1.3125rem;
+  }
 }
 
 .intro-header__glass.glass-text-contrast {
-  font-weight: 600;
+  color: #150a06;
+  line-height: 1.15;
+  font-weight: 700;
+  text-shadow:
+    0 0 1px rgba(255, 255, 255, 1),
+    0 1px 3px rgba(255, 255, 255, 0.98),
+    0 2px 12px rgba(255, 255, 255, 0.85),
+    0 0 20px rgba(255, 255, 255, 0.35);
+}
+
+.dark .intro-header__glass.glass-text-contrast {
+  color: #fffaf5;
+  text-shadow:
+    0 0 1px rgba(0, 0, 0, 1),
+    0 1px 4px rgba(0, 0, 0, 0.9),
+    0 2px 14px rgba(0, 0, 0, 0.75),
+    0 0 18px rgba(0, 0, 0, 0.45);
 }
 
 .dark .intro-header__glass {
-  background: rgba(20, 14, 10, 0.38);
-  border-color: rgba(255, 255, 255, 0.14);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  border-color: rgba(255, 255, 255, 0.16);
+  background: linear-gradient(
+    145deg,
+    rgba(90, 70, 55, 0.42) 0%,
+    rgba(40, 28, 20, 0.22) 48%,
+    rgba(50, 36, 26, 0.34) 100%
+  );
+  -webkit-backdrop-filter: blur(28px) saturate(160%) brightness(0.92);
+  backdrop-filter: blur(28px) saturate(160%) brightness(0.92);
+  box-shadow:
+    0 0 0 0.5px rgba(255, 255, 255, 0.1),
+    0 8px 28px rgba(0, 0, 0, 0.28),
+    inset 0 1px 1px rgba(255, 255, 255, 0.14),
+    inset 0 -0.5px 0 rgba(0, 0, 0, 0.2);
+}
+
+.dark .intro-header__glass::before,
+.dark .glass-panel::before {
+  background: linear-gradient(
+    168deg,
+    rgba(255, 255, 255, 0.22) 0%,
+    rgba(255, 255, 255, 0.06) 40%,
+    rgba(255, 255, 255, 0) 58%
+  );
 }
 
 /* Карточка «Обо мне» */
 .glass-panel {
-  background: rgba(255, 255, 255, 0.32);
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  box-shadow: 0 8px 24px rgba(74, 45, 30, 0.08);
+  background: linear-gradient(
+    155deg,
+    rgba(255, 255, 255, 0.4) 0%,
+    rgba(255, 255, 255, 0.12) 45%,
+    rgba(255, 255, 255, 0.24) 100%
+  );
 }
 
-.glass-panel.glass-text-contrast p {
+/* «Обо мне» — крупный тонкий курсив (×1.5 от прежнего размера) */
+.glass-panel__title {
+  font-family: var(--font-serif), ui-serif, Georgia, serif;
+  font-style: italic;
   font-weight: 400;
+  font-size: clamp(3.5625rem, 13.5vw, 4.875rem);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  margin-bottom: 1.25rem;
+  text-transform: none;
 }
 
-.glass-panel.glass-text-contrast .glass-accent {
+.glass-panel__content {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.glass-panel .glass-accent {
   color: #5c3218;
-  font-weight: 600;
+  font-weight: inherit;
+  letter-spacing: inherit;
   text-shadow:
-    0 0 1px rgba(255, 255, 255, 1),
-    0 1px 3px rgba(255, 255, 255, 0.9);
+    0 0 1px rgba(255, 255, 255, 0.95),
+    0 1px 2px rgba(255, 255, 255, 0.8);
 }
 
 .dark .glass-panel {
-  background: rgba(20, 14, 10, 0.42);
-  border-color: rgba(255, 255, 255, 0.12);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22);
+  background: linear-gradient(
+    155deg,
+    rgba(90, 70, 55, 0.44) 0%,
+    rgba(40, 28, 20, 0.24) 45%,
+    rgba(50, 36, 26, 0.36) 100%
+  );
+  -webkit-backdrop-filter: blur(28px) saturate(160%) brightness(0.92);
+  backdrop-filter: blur(28px) saturate(160%) brightness(0.92);
+  box-shadow:
+    0 0 0 0.5px rgba(255, 255, 255, 0.08),
+    0 12px 32px rgba(0, 0, 0, 0.26),
+    inset 0 1px 1px rgba(255, 255, 255, 0.12),
+    inset 0 -0.5px 0 rgba(0, 0, 0, 0.22);
 }
 
-.dark .glass-panel.glass-text-contrast .glass-accent {
+.dark .glass-panel .glass-accent {
   color: #e8a060;
 }
 
