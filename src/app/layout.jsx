@@ -1,6 +1,5 @@
 import { Playfair_Display, Inter } from 'next/font/google'
-import { ThemeProvider } from 'next-themes'
-import Navbar from '@/components/layout/Navbar'
+import ThemeProviders from '@/components/providers/ThemeProviders'
 import Footer from '@/components/layout/Footer'
 import './globals.css'
 
@@ -33,11 +32,10 @@ export default function RootLayout({ children }) {
   return (
     <html lang="ru" suppressHydrationWarning>
       <body className={`${playfair.variable} ${inter.variable}`}>
-        <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
-          <Navbar />
+        <ThemeProviders>
           <main>{children}</main>
           <Footer />
-        </ThemeProvider>
+        </ThemeProviders>
       </body>
     </html>
   )

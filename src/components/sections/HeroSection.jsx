@@ -8,7 +8,7 @@ export default function HeroSection() {
         alt="Татьяна Золотарева"
         width={640}
         height={640}
-        className="block w-full h-auto"
+        className="intro-photo__image"
         priority
         sizes="100vw"
       />

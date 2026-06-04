@@ -1,4 +1,5 @@
 import { Phone, Mail, Send } from 'lucide-react'
+import FooterThemeToggle from '@/components/layout/FooterThemeToggle'
 import { siteData } from '@/content/data'
 
 export default function Footer() {
@@ -15,7 +16,7 @@ export default function Footer() {
             <p className="text-sm text-[var(--color-muted)] mt-1">{siteData.role} · {siteData.niche}</p>
           </div>
 
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-6 flex-wrap justify-center">
             <a
               href={`tel:${siteData.contacts.phone}`}
               className="flex items-center gap-2 text-sm text-[var(--color-muted)] hover:text-[var(--color-accent)] transition-colors"
@@ -39,6 +40,7 @@ export default function Footer() {
               <Mail size={15} />
               <span>Email</span>
             </a>
+            <FooterThemeToggle />
           </div>
         </div>
 
