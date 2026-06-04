@@ -56,7 +56,7 @@ const toolIcons = {
 function ToolTag({ name }) {
   const Icon = toolIcons[name]
   return (
-    <span className="glass-panel glass-pill glass-on-solid glass-text-contrast glass-ios-text text-sm font-semibold">
+    <span className="glass-panel glass-pill glass-text-contrast glass-ios-text text-sm font-semibold">
       {Icon ? <Icon /> : (
         <span className="w-5 h-5 rounded-[4px] bg-[#3a1f10]/20 dark:bg-[#f0c898]/25 inline-block" />
       )}
@@ -67,7 +67,7 @@ function ToolTag({ name }) {
 
 function AITag({ name, desc }) {
   return (
-    <div className="glass-panel glass-card glass-on-solid glass-text-contrast px-5 py-3.5 max-w-xs">
+    <div className="glass-panel glass-card glass-text-contrast px-5 py-3.5 max-w-xs">
       <p className="glass-ios-text font-semibold glass-accent">{name}</p>
       <p className="glass-panel__body glass-ios-text text-xs mt-1 opacity-80">{desc}</p>
     </div>
@@ -132,7 +132,7 @@ export default function SkillsSection() {
             >
               {skillsData.platforms.map((platform) => (
                 <motion.div key={platform} variants={fadeIn}>
-                  <span className="glass-panel glass-pill glass-on-solid glass-text-contrast glass-ios-text text-sm font-medium opacity-90">
+                  <span className="glass-panel glass-pill glass-text-contrast glass-ios-text text-sm font-medium">
                     {platform}
                   </span>
                 </motion.div>

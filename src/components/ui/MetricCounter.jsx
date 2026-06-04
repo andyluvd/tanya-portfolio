@@ -36,11 +36,11 @@ export default function MetricCounter({ value, label, suffix = '' }) {
 
   return (
     <div ref={ref} className="text-center">
-      <p className="glass-metric__value">
+      <p className="glass-metric__value glass-accent glass-text-contrast">
         {formatNumber(count)}
         {suffix}
       </p>
-      <p className="glass-metric__label glass-panel__body mt-2">{label}</p>
+      <p className="glass-metric__label glass-panel__body glass-text-contrast mt-2">{label}</p>
     </div>
   )
 }

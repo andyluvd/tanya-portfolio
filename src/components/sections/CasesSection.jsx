@@ -18,7 +18,7 @@ const fadeIn = {
 
 export default function CasesSection() {
   return (
-    <section id="cases" className="py-24 bg-[var(--color-surface)]">
+    <section id="cases" className="py-24 bg-[var(--color-bg)]">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <SectionHeading
           eyebrow="Кейсы"
@@ -38,7 +38,7 @@ export default function CasesSection() {
               <motion.div
                 key={metric.label}
                 variants={fadeIn}
-                className="glass-panel glass-card glass-on-solid glass-text-contrast px-5 py-6 sm:px-6 sm:py-7"
+                className="glass-panel glass-card glass-text-contrast px-5 py-6 sm:px-6 sm:py-7"
               >
                 <MetricCounter
                   value={metric.value}
@@ -66,7 +66,7 @@ export default function CasesSection() {
                   e.currentTarget.style.display = 'none'
                 }}
               />
-              <div className="absolute inset-0 z-[2] flex items-center justify-center glass-on-solid glass-text-contrast pointer-events-none">
+              <div className="absolute inset-0 z-[2] flex items-center justify-center glass-text-contrast pointer-events-none">
                 <span className="font-serif italic text-lg opacity-50">Аналитика Pinterest</span>
               </div>
             </div>

@@ -27,10 +27,10 @@ function ContactLink({ href, icon: Icon, label, value, external }) {
     <a
       href={href}
       {...linkProps}
-      className="glass-panel glass-card glass-on-solid glass-text-contrast flex items-center gap-4 px-5 py-5 transition-opacity duration-200 hover:opacity-90"
+      className="glass-panel glass-card glass-text-contrast flex items-center gap-4 px-5 py-5 transition-opacity duration-200 hover:opacity-90"
     >
       <div className="glass-panel w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0">
-        <Icon size={18} className="text-[#3a1f10] dark:text-[#f0c898]" strokeWidth={2} />
+        <Icon size={18} className="text-current" strokeWidth={2} />
       </div>
       <div>
         <p className="glass-ios-text text-xs opacity-65 mb-0.5">{label}</p>
@@ -68,7 +68,7 @@ export default function ContactSection() {
   }
 
   return (
-    <section id="contact" className="py-24 bg-[var(--color-surface)]">
+    <section id="contact" className="py-24 bg-[var(--color-bg)]">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <SectionHeading
           eyebrow="Контакты"
@@ -118,7 +118,7 @@ export default function ContactSection() {
             viewport={{ once: true, margin: '-40px' }}
           >
             {status === 'success' ? (
-              <div className="glass-panel glass-card glass-on-solid glass-text-contrast px-8 py-10 text-center">
+              <div className="glass-panel glass-card glass-text-contrast px-8 py-10 text-center">
                 <p className="section-title text-[clamp(1.75rem,5vw,2.25rem)] mb-2">Сообщение отправлено!</p>
                 <p className="glass-panel__body glass-ios-text text-sm opacity-80">
                   Я свяжусь с вами в ближайшее время.
@@ -128,7 +128,7 @@ export default function ContactSection() {
               <form
                 ref={formRef}
                 onSubmit={handleSubmit}
-                className="glass-panel glass-card glass-on-solid glass-text-contrast px-6 sm:px-8 py-7 flex flex-col gap-5"
+                className="glass-panel glass-card glass-text-contrast px-6 sm:px-8 py-7 flex flex-col gap-5"
               >
                 <div>
                   <label className="block glass-ios-text text-sm font-semibold mb-2 opacity-90">

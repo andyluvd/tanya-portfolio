@@ -343,34 +343,7 @@ body {
 }
 
 
-/* ─── Секции ниже intro (стиль пилюли + «Обо мне») ─────── */
-
-.glass-on-solid.glass-text-contrast,
-.glass-on-solid.glass-text-contrast .glass-panel__body,
-.glass-on-solid.glass-text-contrast .glass-ios-text,
-.glass-on-solid.glass-text-contrast .section-subtitle {
-  color: #150a06;
-  text-shadow: none;
-}
-
-.glass-on-solid.glass-text-contrast .glass-accent,
-.glass-on-solid.glass-text-contrast .section-eyebrow {
-  color: #3a1f10;
-  text-shadow: none;
-}
-
-.dark .glass-on-solid.glass-text-contrast,
-.dark .glass-on-solid.glass-text-contrast .glass-panel__body,
-.dark .glass-on-solid.glass-text-contrast .glass-ios-text,
-.dark .glass-on-solid.glass-text-contrast .section-subtitle {
-  color: #fffaf5;
-  text-shadow: none;
-}
-
-.dark .glass-on-solid.glass-text-contrast .glass-accent,
-.dark .glass-on-solid.glass-text-contrast .section-eyebrow {
-  color: #f0c898;
-}
+/* ─── Модификаторы стекла (база = .glass-panel как «Обо мне») ─ */
 
 .section-eyebrow {
   font-weight: 600;
@@ -396,27 +369,27 @@ body {
   opacity: 0.82;
 }
 
+.section-title.glass-text-contrast,
+.section-eyebrow.glass-text-contrast,
+.section-subtitle.glass-text-contrast {
+  color: #150a06;
+  text-shadow:
+    0 0 1px rgba(255, 255, 255, 0.95),
+    0 1px 2px rgba(255, 255, 255, 0.85);
+}
+
+.dark .section-title.glass-text-contrast,
+.dark .section-eyebrow.glass-text-contrast,
+.dark .section-subtitle.glass-text-contrast {
+  color: #fffaf5;
+  text-shadow:
+    0 0 1px rgba(0, 0, 0, 0.85),
+    0 1px 3px rgba(0, 0, 0, 0.65);
+}
+
+/* Карточка как «Обо мне»: только скругление, blur/тени из .glass-panel */
 .glass-card {
   border-radius: 28px;
-  background: linear-gradient(
-    155deg,
-    rgba(255, 255, 255, 0.13) 0%,
-    rgba(255, 255, 255, 0.04) 45%,
-    rgba(255, 255, 255, 0.08) 100%
-  );
-}
-
-.dark .glass-card {
-  background: linear-gradient(
-    155deg,
-    rgba(90, 70, 55, 0.15) 0%,
-    rgba(40, 28, 20, 0.07) 45%,
-    rgba(50, 36, 26, 0.11) 100%
-  );
-}
-
-.service-card__icon {
-  display: block;
 }
 
 .glass-pill {
@@ -425,40 +398,38 @@ body {
   gap: 0.5rem;
   padding: 0.5rem 1.125rem;
   border-radius: 9999px;
-  background: linear-gradient(
-    145deg,
-    rgba(255, 255, 255, 0.12) 0%,
-    rgba(255, 255, 255, 0.04) 48%,
-    rgba(255, 255, 255, 0.08) 100%
-  );
-}
-
-.dark .glass-pill {
-  background: linear-gradient(
-    145deg,
-    rgba(90, 70, 55, 0.14) 0%,
-    rgba(40, 28, 20, 0.06) 48%,
-    rgba(50, 36, 26, 0.1) 100%
-  );
 }
 
 .glass-field {
   border-radius: 20px;
-  background: linear-gradient(
-    155deg,
-    rgba(255, 255, 255, 0.1) 0%,
-    rgba(255, 255, 255, 0.03) 50%,
-    rgba(255, 255, 255, 0.06) 100%
-  );
 }
 
-.dark .glass-field {
-  background: linear-gradient(
-    155deg,
-    rgba(90, 70, 55, 0.12) 0%,
-    rgba(40, 28, 20, 0.05) 50%,
-    rgba(50, 36, 26, 0.09) 100%
-  );
+/* Услуги: accent поверх тех же теней стекла, без transform на panel */
+.glass-panel.service-card {
+  --glow: 0;
+  border-radius: 28px;
+}
+
+.glass-panel.service-card {
+  box-shadow:
+    0 0 0 0.5px rgba(255, 255, 255, 0.28),
+    0 8px 28px rgba(74, 45, 30, 0.1),
+    inset 0 1px 1px rgba(255, 255, 255, 0.72),
+    inset 0 -0.5px 0 rgba(255, 255, 255, 0.18),
+    0 16px 40px rgba(123, 79, 50, calc(0.12 * var(--glow)));
+}
+
+.dark .glass-panel.service-card {
+  box-shadow:
+    0 0 0 0.5px rgba(255, 255, 255, 0.08),
+    0 12px 32px rgba(0, 0, 0, 0.26),
+    inset 0 1px 1px rgba(255, 255, 255, 0.12),
+    inset 0 -0.5px 0 rgba(0, 0, 0, 0.22),
+    0 16px 40px rgba(200, 126, 69, calc(0.2 * var(--glow)));
+}
+
+.service-card__lift {
+  will-change: transform;
 }
 
 .glass-field input,
@@ -489,17 +460,24 @@ body {
   letter-spacing: -0.02em;
   border-radius: 9999px;
   padding: 0.75rem 1.75rem;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  color: #fffaf5;
+  border: 0.5px solid rgba(255, 255, 255, 0.42);
+  -webkit-backdrop-filter: blur(12px) saturate(185%) brightness(1.08);
+  backdrop-filter: blur(12px) saturate(185%) brightness(1.08);
   background: linear-gradient(
     145deg,
-    rgba(123, 79, 50, 0.92) 0%,
-    rgba(74, 45, 30, 0.98) 100%
+    rgba(123, 79, 50, 0.88) 0%,
+    rgba(74, 45, 30, 0.94) 100%
   );
-  color: #fffaf5;
-  border: 0.5px solid rgba(255, 255, 255, 0.25);
   box-shadow:
-    0 4px 20px rgba(74, 45, 30, 0.22),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
-  transition: opacity 0.2s ease, transform 0.2s ease;
+    0 0 0 0.5px rgba(255, 255, 255, 0.28),
+    0 8px 28px rgba(74, 45, 30, 0.14),
+    inset 0 1px 1px rgba(255, 255, 255, 0.35),
+    inset 0 -0.5px 0 rgba(255, 255, 255, 0.12);
+  transition: opacity 0.2s ease;
 }
 
 .glass-btn:hover:not(:disabled) {
@@ -511,11 +489,19 @@ body {
 }
 
 .dark .glass-btn {
+  border-color: rgba(255, 255, 255, 0.16);
+  -webkit-backdrop-filter: blur(12px) saturate(160%) brightness(0.92);
+  backdrop-filter: blur(12px) saturate(160%) brightness(0.92);
   background: linear-gradient(
     145deg,
-    rgba(200, 126, 69, 0.95) 0%,
-    rgba(123, 79, 50, 0.98) 100%
+    rgba(200, 126, 69, 0.9) 0%,
+    rgba(123, 79, 50, 0.94) 100%
   );
+  box-shadow:
+    0 0 0 0.5px rgba(255, 255, 255, 0.1),
+    0 8px 28px rgba(0, 0, 0, 0.28),
+    inset 0 1px 1px rgba(255, 255, 255, 0.14),
+    inset 0 -0.5px 0 rgba(0, 0, 0, 0.2);
 }
 
 .glass-metric__value {
@@ -524,11 +510,6 @@ body {
   font-weight: 400;
   font-size: clamp(2.5rem, 6vw, 3.25rem);
   line-height: 1;
-  color: #3a1f10;
-}
-
-.dark .glass-metric__value {
-  color: #f0c898;
 }
 
 .glass-metric__label {
@@ -537,7 +518,7 @@ body {
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  opacity: 0.65;
+  opacity: 0.88;
 }
 
 /* ─── Блок «Обо мне» ───────────────────────────────────── */

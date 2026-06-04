@@ -17,11 +17,11 @@ export default function SectionHeading({ eyebrow, title, subtitle, className = '
       className={`mb-12 ${className}`}
     >
       {eyebrow ? (
-        <p className="section-eyebrow glass-ios-text glass-on-solid glass-text-contrast">{eyebrow}</p>
+        <p className="section-eyebrow glass-ios-text glass-text-contrast glass-accent">{eyebrow}</p>
       ) : null}
-      <h2 className="section-title glass-text-contrast glass-on-solid">{title}</h2>
+      <h2 className="section-title glass-text-contrast">{title}</h2>
       {subtitle ? (
-        <p className="section-subtitle glass-panel__body glass-ios-text glass-on-solid glass-text-contrast mt-4 max-w-xl">
+        <p className="section-subtitle glass-panel__body glass-ios-text glass-text-contrast mt-4 max-w-xl">
           {subtitle}
         </p>
       ) : null}

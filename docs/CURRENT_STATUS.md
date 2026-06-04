@@ -24,7 +24,7 @@
 - Стекло intro: `blur(12px)`, прозрачная заливка (см. `globals.css`)
 
 ### Этап 3 — Секции + услуги по скроллу ✅ (ГОТОВО)
-- **Единый стиль** (как пилюля + «Обо мне»): `SectionHeading`, `.glass-panel`, `.glass-card`, `.glass-pill`, `.glass-on-solid`
+- **Единый стиль** (как пилюля + «Обо мне»): все блоки на `.glass-panel` — один blur, тени, блик; модификаторы только форму
 - **Services, Skills, Cases, Contact, Footer** — стекло / типографика intro
 - **Услуги — подсветка от скролла** (не hover, не таймер):
   - `src/lib/servicesScrollProgress.js` — `getCardGlowFromViewportCenter()`
@@ -115,7 +115,7 @@ npm run build && rsync -avz --delete out/ vds-portfolio:/var/www/tanya/
 
 - **Услуги:** `glow = smoothstep(1 - |cardCenter - vh/2| / falloff)`; rAF на `scroll` + `resize`
 - **Пилюля:** `getFixedTop(aboutTop)`, без `floating`
-- **Стекло:** `.intro-header__glass`, `.glass-panel`, `blur(12px)`, `.glass-on-solid` для секций на фоне
+- **Стекло:** `.intro-header__glass`, `.glass-panel`, `blur(12px)`; секции без отдельных фонов у `.glass-card`
 - **ScrollToTop** + `history.scrollRestoration = 'manual'`
 
 ## Баги и блокеры

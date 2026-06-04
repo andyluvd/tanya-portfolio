@@ -54,7 +54,7 @@ Glass-карточка «Обо мне»; fade только `opacity` на об�
 | `.intro-header__glass` | Пилюля (на фото) |
 | `.glass-panel` | Базовое стекло: blur, блик `::before` |
 | `.glass-card` / `.glass-pill` / `.glass-field` | Секции ниже intro |
-| `.glass-on-solid` | Текст без photo-shadow на кремовом фоне |
+| `.glass-card` / `.glass-pill` | Только скругление и layout; blur/тени из `.glass-panel` |
 | `.glass-ios-text` | SF Pro / system |
 | `.section-title` / `.section-eyebrow` | Заголовки секций (Playfair italic) |
 | Параметры | `blur(12px)`, лёгкая прозрачная заливка |

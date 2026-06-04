@@ -21,7 +21,7 @@ export default function Footer() {
           <div className="flex items-center gap-4 sm:gap-6 flex-wrap justify-center">
             <a
               href={`tel:${siteData.contacts.phone}`}
-              className="glass-panel glass-pill glass-on-solid glass-text-contrast glass-ios-text text-sm font-medium px-4 py-2.5 flex items-center gap-2 hover:opacity-90 transition-opacity"
+              className="glass-panel glass-pill glass-text-contrast glass-ios-text text-sm font-medium px-4 py-2.5 flex items-center gap-2 hover:opacity-90 transition-opacity"
             >
               <Phone size={15} />
               <span>{siteData.contacts.phone}</span>
@@ -30,14 +30,14 @@ export default function Footer() {
               href={siteData.contacts.telegram}
               target="_blank"
               rel="noopener noreferrer"
-              className="glass-panel glass-pill glass-on-solid glass-text-contrast glass-ios-text text-sm font-medium px-4 py-2.5 flex items-center gap-2 hover:opacity-90 transition-opacity"
+              className="glass-panel glass-pill glass-text-contrast glass-ios-text text-sm font-medium px-4 py-2.5 flex items-center gap-2 hover:opacity-90 transition-opacity"
             >
               <Send size={15} />
               <span>Telegram</span>
             </a>
             <a
               href={`mailto:${siteData.contacts.email}`}
-              className="glass-panel glass-pill glass-on-solid glass-text-contrast glass-ios-text text-sm font-medium px-4 py-2.5 flex items-center gap-2 hover:opacity-90 transition-opacity"
+              className="glass-panel glass-pill glass-text-contrast glass-ios-text text-sm font-medium px-4 py-2.5 flex items-center gap-2 hover:opacity-90 transition-opacity"
             >
               <Mail size={15} />
               <span>Email</span>
