@@ -38,7 +38,7 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Фото липнет при скролле — находится под overlay */
+/* ─── Фото ─────────────────────────────────────────────── */
 .intro-photo {
   position: -webkit-sticky;
   position: sticky;
@@ -47,7 +47,6 @@ body {
   background-color: var(--color-bg);
 }
 
-/* Нижняя часть фото плавно уходит в прозрачность → виден фон страницы */
 .intro-photo__image {
   display: block;
   width: 100%;
@@ -68,48 +67,37 @@ body {
   );
 }
 
-/*
-  Overlay поверх фото: margin-top: -100vw поднимает к началу фото.
-  Содержит: [пилюля sticky] + [прозрачный spacer = высота фото] + [About]
-*/
-.intro-overlay {
-  position: relative;
-  z-index: 10;
-  margin-top: -100vw;
-}
+/* ─── Пилюля «Золотарёва Татьяна» ──────────────────────── */
 
-/* Пилюля прилипает при скролле и отлипает когда About доезжает до неё */
+/* Обёртка: горизонтальное центрирование */
 .intro-header {
-  position: -webkit-sticky;
-  position: sticky;
-  top: 1rem;
-  z-index: 20;
   display: flex;
   justify-content: center;
-  padding: 0.75rem 1.25rem;
-  pointer-events: none;
-}
-
-.intro-header__glass {
-  pointer-events: auto;
-}
-
-/* Прозрачная зона: занимает место фото, фото просвечивает снизу */
-.intro-spacer {
-  width: 100%;
-  height: calc(100vw - 4.5rem); /* 100vw минус высота пилюли */
-  pointer-events: none;
-}
-
-.intro-about-wrap {
+  padding: 1rem 1.25rem 0.5rem;
   position: relative;
-  z-index: 10;
+  z-index: 20;
+}
+
+/* Состояние fixed: прилипает к верху при скролле над фото */
+.intro-header--fixed {
+  position: fixed;
+  top: 16px;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  display: flex;
+  justify-content: center;
+  padding: 0 1.25rem;
+  pointer-events: none;
+}
+.intro-header--fixed > * {
+  pointer-events: auto;
 }
 
 /* Стиль стеклянной пилюли */
 .intro-header__glass {
   display: inline-block;
-  padding: 0.75rem 1.75rem;
+  padding: 0.7rem 1.75rem;
   text-align: center;
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
@@ -123,6 +111,13 @@ body {
   background: rgba(30, 20, 14, 0.65);
 }
 
+/* ─── Блок «Обо мне» ───────────────────────────────────── */
+.intro-about-wrap {
+  position: relative;
+  z-index: 10;
+}
+
+/* ─── Прочее ────────────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

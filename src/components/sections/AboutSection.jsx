@@ -20,10 +20,10 @@ function Spaced({ children }) {
   )
 }
 
-export default function AboutSection() {
+export default function AboutContent() {
   return (
-    <section id="about" className="intro-about-wrap">
-      <div className="px-5 sm:px-10 md:px-14 pt-2 pb-6">
+    <>
+      <div className="px-5 sm:px-10 md:px-14 pt-4 pb-6">
         <motion.div
           initial={{ opacity: 0, y: 32 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -82,6 +82,6 @@ export default function AboutSection() {
       </div>
 
       <div className="bg-[var(--color-bg)] min-h-[40vh]" />
-    </section>
+    </>
   )
 }
