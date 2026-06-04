@@ -7,7 +7,13 @@ const fadeUp = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: 'easeOut' } },
 }
 
-export default function SectionHeading({ eyebrow, title, subtitle, className = '' }) {
+export default function SectionHeading({
+  eyebrow,
+  title,
+  subtitle,
+  titleClassName = 'section-title',
+  className = '',
+}) {
   return (
     <motion.header
       variants={fadeUp}
@@ -19,7 +25,7 @@ export default function SectionHeading({ eyebrow, title, subtitle, className = '
       {eyebrow ? (
         <p className="section-eyebrow glass-ios-text glass-text-contrast glass-accent">{eyebrow}</p>
       ) : null}
-      <h2 className="section-title glass-text-contrast">{title}</h2>
+      <h2 className={`${titleClassName} glass-text-contrast`}>{title}</h2>
       {subtitle ? (
         <p className="section-subtitle glass-panel__body glass-ios-text glass-text-contrast mt-4 max-w-xl">
           {subtitle}

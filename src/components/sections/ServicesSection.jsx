@@ -54,7 +54,7 @@ export default function ServicesSection() {
   return (
     <section id="services" className="py-24 bg-[var(--color-bg)]">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <SectionHeading eyebrow="Услуги" title="Что я делаю" />
+        <SectionHeading title="Бренд в медиа" titleClassName="glass-panel__title" />
 
         <div ref={gridRef} className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           {servicesData.map((service, index) => (
