@@ -52,11 +52,15 @@ export default function ServicesSection() {
   }, [updateFromScroll])
 
   return (
-    <section id="services" className="py-24 bg-[var(--color-bg)]">
+    <section id="services" className="pt-8 pb-20 sm:pt-10 sm:pb-24 bg-[var(--color-bg)]">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <SectionHeading title="Бренд в медиа" titleClassName="glass-panel__title" />
+        <SectionHeading
+          title="Бренд в медиа"
+          titleClassName="glass-panel__title"
+          className="mb-9 sm:mb-10"
+        />
 
-        <div ref={gridRef} className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <div ref={gridRef} className="services-grid">
           {servicesData.map((service, index) => (
             <ServiceCard key={service.icon} glow={glows[index]} {...service} />
           ))}

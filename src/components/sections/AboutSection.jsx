@@ -72,7 +72,7 @@ export default function AboutContent() {
         </motion.div>
       </div>
 
-      <div className="bg-[var(--color-bg)] min-h-[40vh]" />
+      <div className="intro-about-spacer" aria-hidden />
     </>
   )
 }

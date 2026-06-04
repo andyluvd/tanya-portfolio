@@ -28,7 +28,7 @@ function useGlowParts(glow) {
   return useMemo(() => {
     const [r, gCol, b] = rgb.split(',').map((n) => Number(n.trim()))
     return {
-      lift: { y: lerp(0, -6, g) },
+      lift: { y: lerp(0, -4, g) },
       line: { opacity: g, scaleX: lerp(0.5, 1, g) },
       iconBox: {
         scale: lerp(1, 1.1, g),
@@ -48,38 +48,37 @@ export default function ServiceCard({ icon, title, desc, glow = 0 }) {
   const parts = useGlowParts(glow)
 
   return (
-    <article className="h-full">
+    <article>
       <div
-        className="glass-panel glass-card glass-text-contrast service-card h-full px-6 sm:px-7 py-7 sm:py-8"
+        className="glass-panel glass-card glass-text-contrast service-card service-card--compact"
         style={{ '--glow': glow }}
       >
-        <motion.div
-          style={parts.lift}
-          className="service-card__lift relative flex h-full flex-col"
-        >
+        <motion.div style={parts.lift} className="service-card__lift relative">
           <motion.div
             style={parts.line}
-            className="absolute top-0 left-6 right-6 h-[2px] rounded-full bg-[var(--color-accent)] origin-left z-[2]"
+            className="absolute top-0 left-5 right-5 sm:left-6 sm:right-6 h-[2px] rounded-full bg-[var(--color-accent)] origin-left z-[2]"
             aria-hidden
           />
 
-          <div className="relative mb-5 z-[1]">
+          <div className="service-card__inner relative z-[1]">
             <motion.div
               style={parts.iconBox}
-              className="glass-panel w-12 h-12 rounded-xl flex items-center justify-center border border-solid"
+              className="glass-panel w-10 h-10 sm:w-11 sm:h-11 rounded-xl flex-shrink-0 flex items-center justify-center border border-solid"
             >
               <motion.div style={parts.iconColor}>
-                <Icon size={20} strokeWidth={2} className="text-current" />
+                <Icon size={18} strokeWidth={2} className="text-current" />
               </motion.div>
             </motion.div>
-          </div>
 
-          <h3 className="glass-ios-text font-semibold mb-2 tracking-tight relative z-[1]">
-            {title}
-          </h3>
-          <p className="glass-panel__body glass-ios-text text-[0.9375rem] leading-relaxed opacity-90 relative z-[1] flex-1">
-            {desc}
-          </p>
+            <div className="min-w-0 flex-1">
+              <h3 className="service-card__title glass-text-contrast font-semibold tracking-tight">
+                {title}
+              </h3>
+              <p className="service-card__desc glass-panel__body mt-1 leading-snug opacity-90">
+                {desc}
+              </p>
+            </div>
+          </div>
         </motion.div>
       </div>
     </article>
