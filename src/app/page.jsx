@@ -9,17 +9,12 @@ import ContactSection from '@/components/sections/ContactSection'
 export default function Home() {
   return (
     <>
-      <div className="relative">
-        <HeroSection />
-
-        {/* Накладывается на фото: заголовок (на фоне страницы) + карточка «Обо мне» */}
-        <div className="intro-scroll -mt-[100vw]">
-          <div className="bg-[var(--color-bg)]">
-            <IntroHeader />
-          </div>
-          <div className="intro-photo-spacer" aria-hidden="true" />
+      <div className="intro-layout">
+        <div className="intro-scroll">
+          <IntroHeader />
           <AboutSection />
         </div>
+        <HeroSection />
       </div>
 
       <ServicesSection />
