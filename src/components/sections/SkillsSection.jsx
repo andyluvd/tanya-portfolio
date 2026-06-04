@@ -52,7 +52,7 @@ function AITag({ name, desc }) {
 
 export default function SkillsSection() {
   return (
-    <section id="skills" className="py-24">
+    <section id="skills" className="py-24 bg-[var(--color-bg)]">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           variants={fadeUp}
