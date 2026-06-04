@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import AboutContent from './AboutSection'
 
@@ -16,6 +16,26 @@ import AboutContent from './AboutSection'
 
 const STICK_TOP = 16
 const HANDOFF_START = 88
+/** За сколько px скролла фото доходит до максимальной блеклости (с момента прилипания пилюли) */
+const PHOTO_FADE_DISTANCE = 520
+
+function applyPhotoFade(scrollY, imgEl, noiseEl) {
+  if (!imgEl) return
+  if (scrollY <= 0) {
+    imgEl.style.opacity = ''
+    imgEl.style.filter = ''
+    if (noiseEl) noiseEl.style.opacity = '0'
+    return
+  }
+  const t = Math.min(1, scrollY / PHOTO_FADE_DISTANCE)
+  imgEl.style.opacity = String(1 - t)
+  const brightness = 1 - t * 0.28
+  const saturate = 1 - t * 0.65
+  imgEl.style.filter = `brightness(${brightness}) saturate(${saturate})`
+  if (noiseEl) {
+    noiseEl.style.opacity = String(t * 0.22)
+  }
+}
 
 function getFixedTop(aboutTop) {
   if (aboutTop >= HANDOFF_START) return STICK_TOP
@@ -35,15 +55,22 @@ function GlassPill() {
 export default function IntroSection() {
   const [mode, setMode] = useState('natural')
   const [fixedTop, setFixedTop] = useState(STICK_TOP)
+  const photoRef = useRef(null)
+  const photoNoiseRef = useRef(null)
 
   useEffect(() => {
-    const onScroll = () => {
+    let rafId = 0
+
+    const update = () => {
       const about = document.getElementById('about')
       if (!about) return
 
+      const scrollY = window.scrollY
       const aboutTop = about.getBoundingClientRect().top
 
-      if (window.scrollY > 0) {
+      applyPhotoFade(scrollY, photoRef.current, photoNoiseRef.current)
+
+      if (scrollY > 0) {
         setMode('fixed')
         setFixedTop(getFixedTop(aboutTop))
       } else {
@@ -51,9 +78,20 @@ export default function IntroSection() {
       }
     }
 
+    const onScroll = () => {
+      cancelAnimationFrame(rafId)
+      rafId = requestAnimationFrame(update)
+    }
+
     window.addEventListener('scroll', onScroll, { passive: true })
-    onScroll()
-    return () => window.removeEventListener('scroll', onScroll)
+    window.addEventListener('resize', onScroll)
+    update()
+
+    return () => {
+      cancelAnimationFrame(rafId)
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', onScroll)
+    }
   }, [])
 
   return (
@@ -76,7 +114,9 @@ export default function IntroSection() {
       )}
 
       <div className="intro-photo">
+        <div ref={photoNoiseRef} className="intro-photo__noise" aria-hidden />
         <Image
+          ref={photoRef}
           src="/photo.jpg"
           alt="Татьяна Золотарева"
           width={640}

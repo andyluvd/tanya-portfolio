@@ -49,12 +49,33 @@ body {
   top: 0;
   z-index: 0;
   background-color: var(--color-bg);
+  isolation: isolate;
+}
+
+/* Шум на фото — opacity задаётся в JS (1:1 со скроллом) */
+.intro-photo__noise {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+  mix-blend-mode: soft-light;
+}
+
+.dark .intro-photo__noise {
+  mix-blend-mode: overlay;
+  filter: contrast(1.15);
 }
 
 .intro-photo__image {
+  position: relative;
+  z-index: 1;
   display: block;
   width: 100%;
   height: auto;
+  will-change: opacity, filter;
   -webkit-mask-image: linear-gradient(
     to bottom,
     #000 0%,
@@ -123,8 +144,8 @@ body {
   overflow: hidden;
   isolation: isolate;
   border: 0.5px solid rgba(255, 255, 255, 0.42);
-  -webkit-backdrop-filter: blur(28px) saturate(185%) brightness(1.08);
-  backdrop-filter: blur(28px) saturate(185%) brightness(1.08);
+  -webkit-backdrop-filter: blur(12px) saturate(185%) brightness(1.08);
+  backdrop-filter: blur(12px) saturate(185%) brightness(1.08);
   box-shadow:
     0 0 0 0.5px rgba(255, 255, 255, 0.28),
     0 8px 28px rgba(74, 45, 30, 0.1),
@@ -142,9 +163,9 @@ body {
   pointer-events: none;
   background: linear-gradient(
     168deg,
-    rgba(255, 255, 255, 0.62) 0%,
-    rgba(255, 255, 255, 0.14) 38%,
-    rgba(255, 255, 255, 0.04) 52%,
+    rgba(255, 255, 255, 0.28) 0%,
+    rgba(255, 255, 255, 0.06) 38%,
+    rgba(255, 255, 255, 0.02) 52%,
     rgba(255, 255, 255, 0) 62%
   );
   z-index: 0;
@@ -178,9 +199,9 @@ body {
   text-align: center;
   background: linear-gradient(
     145deg,
-    rgba(255, 255, 255, 0.38) 0%,
-    rgba(255, 255, 255, 0.14) 48%,
-    rgba(255, 255, 255, 0.22) 100%
+    rgba(255, 255, 255, 0.12) 0%,
+    rgba(255, 255, 255, 0.04) 48%,
+    rgba(255, 255, 255, 0.08) 100%
   );
   border-radius: 9999px;
 }
@@ -223,12 +244,12 @@ body {
   border-color: rgba(255, 255, 255, 0.16);
   background: linear-gradient(
     145deg,
-    rgba(90, 70, 55, 0.42) 0%,
-    rgba(40, 28, 20, 0.22) 48%,
-    rgba(50, 36, 26, 0.34) 100%
+    rgba(90, 70, 55, 0.14) 0%,
+    rgba(40, 28, 20, 0.06) 48%,
+    rgba(50, 36, 26, 0.1) 100%
   );
-  -webkit-backdrop-filter: blur(28px) saturate(160%) brightness(0.92);
-  backdrop-filter: blur(28px) saturate(160%) brightness(0.92);
+  -webkit-backdrop-filter: blur(12px) saturate(160%) brightness(0.92);
+  backdrop-filter: blur(12px) saturate(160%) brightness(0.92);
   box-shadow:
     0 0 0 0.5px rgba(255, 255, 255, 0.1),
     0 8px 28px rgba(0, 0, 0, 0.28),
@@ -250,9 +271,9 @@ body {
 .glass-panel {
   background: linear-gradient(
     155deg,
-    rgba(255, 255, 255, 0.4) 0%,
-    rgba(255, 255, 255, 0.12) 45%,
-    rgba(255, 255, 255, 0.24) 100%
+    rgba(255, 255, 255, 0.13) 0%,
+    rgba(255, 255, 255, 0.04) 45%,
+    rgba(255, 255, 255, 0.08) 100%
   );
 }
 
@@ -274,24 +295,46 @@ body {
   gap: 1rem;
 }
 
-.glass-panel .glass-accent {
-  color: #5c3218;
-  font-weight: inherit;
+/* Абзацы «Обо мне» — контраст как у пилюли, чуть мягче по жирности */
+.glass-panel.glass-text-contrast .glass-panel__body {
+  color: #150a06;
+  font-weight: 600;
+  text-shadow:
+    0 0 1px rgba(255, 255, 255, 1),
+    0 1px 3px rgba(255, 255, 255, 0.96),
+    0 2px 10px rgba(255, 255, 255, 0.82);
+}
+
+.glass-panel.glass-text-contrast .glass-accent {
+  color: #3a1f10;
+  font-weight: 600;
   letter-spacing: inherit;
   text-shadow:
-    0 0 1px rgba(255, 255, 255, 0.95),
-    0 1px 2px rgba(255, 255, 255, 0.8);
+    0 0 1px rgba(255, 255, 255, 1),
+    0 1px 2px rgba(255, 255, 255, 0.92);
+}
+
+.dark .glass-panel.glass-text-contrast .glass-panel__body {
+  color: #fffaf5;
+  text-shadow:
+    0 0 1px rgba(0, 0, 0, 1),
+    0 1px 4px rgba(0, 0, 0, 0.88),
+    0 2px 12px rgba(0, 0, 0, 0.72);
+}
+
+.dark .glass-panel.glass-text-contrast .glass-accent {
+  color: #f0c898;
 }
 
 .dark .glass-panel {
   background: linear-gradient(
     155deg,
-    rgba(90, 70, 55, 0.44) 0%,
-    rgba(40, 28, 20, 0.24) 45%,
-    rgba(50, 36, 26, 0.36) 100%
+    rgba(90, 70, 55, 0.15) 0%,
+    rgba(40, 28, 20, 0.07) 45%,
+    rgba(50, 36, 26, 0.11) 100%
   );
-  -webkit-backdrop-filter: blur(28px) saturate(160%) brightness(0.92);
-  backdrop-filter: blur(28px) saturate(160%) brightness(0.92);
+  -webkit-backdrop-filter: blur(12px) saturate(160%) brightness(0.92);
+  backdrop-filter: blur(12px) saturate(160%) brightness(0.92);
   box-shadow:
     0 0 0 0.5px rgba(255, 255, 255, 0.08),
     0 12px 32px rgba(0, 0, 0, 0.26),
@@ -299,8 +342,202 @@ body {
     inset 0 -0.5px 0 rgba(0, 0, 0, 0.22);
 }
 
-.dark .glass-panel .glass-accent {
-  color: #e8a060;
+
+/* ─── Секции ниже intro (стиль пилюли + «Обо мне») ─────── */
+
+.glass-on-solid.glass-text-contrast,
+.glass-on-solid.glass-text-contrast .glass-panel__body,
+.glass-on-solid.glass-text-contrast .glass-ios-text,
+.glass-on-solid.glass-text-contrast .section-subtitle {
+  color: #150a06;
+  text-shadow: none;
+}
+
+.glass-on-solid.glass-text-contrast .glass-accent,
+.glass-on-solid.glass-text-contrast .section-eyebrow {
+  color: #3a1f10;
+  text-shadow: none;
+}
+
+.dark .glass-on-solid.glass-text-contrast,
+.dark .glass-on-solid.glass-text-contrast .glass-panel__body,
+.dark .glass-on-solid.glass-text-contrast .glass-ios-text,
+.dark .glass-on-solid.glass-text-contrast .section-subtitle {
+  color: #fffaf5;
+  text-shadow: none;
+}
+
+.dark .glass-on-solid.glass-text-contrast .glass-accent,
+.dark .glass-on-solid.glass-text-contrast .section-eyebrow {
+  color: #f0c898;
+}
+
+.section-eyebrow {
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-size: 0.8125rem;
+  margin-bottom: 0.65rem;
+  opacity: 0.88;
+}
+
+.section-title {
+  font-family: var(--font-serif), ui-serif, Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(2.375rem, 9vw, 3.5rem);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  text-transform: none;
+}
+
+.section-subtitle {
+  font-weight: 500;
+  opacity: 0.82;
+}
+
+.glass-card {
+  border-radius: 28px;
+  background: linear-gradient(
+    155deg,
+    rgba(255, 255, 255, 0.13) 0%,
+    rgba(255, 255, 255, 0.04) 45%,
+    rgba(255, 255, 255, 0.08) 100%
+  );
+}
+
+.dark .glass-card {
+  background: linear-gradient(
+    155deg,
+    rgba(90, 70, 55, 0.15) 0%,
+    rgba(40, 28, 20, 0.07) 45%,
+    rgba(50, 36, 26, 0.11) 100%
+  );
+}
+
+.service-card__icon {
+  display: block;
+}
+
+.glass-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1.125rem;
+  border-radius: 9999px;
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.12) 0%,
+    rgba(255, 255, 255, 0.04) 48%,
+    rgba(255, 255, 255, 0.08) 100%
+  );
+}
+
+.dark .glass-pill {
+  background: linear-gradient(
+    145deg,
+    rgba(90, 70, 55, 0.14) 0%,
+    rgba(40, 28, 20, 0.06) 48%,
+    rgba(50, 36, 26, 0.1) 100%
+  );
+}
+
+.glass-field {
+  border-radius: 20px;
+  background: linear-gradient(
+    155deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0.03) 50%,
+    rgba(255, 255, 255, 0.06) 100%
+  );
+}
+
+.dark .glass-field {
+  background: linear-gradient(
+    155deg,
+    rgba(90, 70, 55, 0.12) 0%,
+    rgba(40, 28, 20, 0.05) 50%,
+    rgba(50, 36, 26, 0.09) 100%
+  );
+}
+
+.glass-field input,
+.glass-field textarea {
+  background: transparent;
+  color: inherit;
+  font-family: var(--font-ios);
+}
+
+.glass-field input::placeholder,
+.glass-field textarea::placeholder {
+  color: rgba(74, 45, 30, 0.45);
+}
+
+.dark .glass-field input::placeholder,
+.dark .glass-field textarea::placeholder {
+  color: rgba(245, 208, 169, 0.4);
+}
+
+.glass-field input:focus,
+.glass-field textarea:focus {
+  outline: none;
+}
+
+.glass-btn {
+  font-family: var(--font-ios);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  border-radius: 9999px;
+  padding: 0.75rem 1.75rem;
+  background: linear-gradient(
+    145deg,
+    rgba(123, 79, 50, 0.92) 0%,
+    rgba(74, 45, 30, 0.98) 100%
+  );
+  color: #fffaf5;
+  border: 0.5px solid rgba(255, 255, 255, 0.25);
+  box-shadow:
+    0 4px 20px rgba(74, 45, 30, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.glass-btn:hover:not(:disabled) {
+  opacity: 0.92;
+}
+
+.glass-btn:disabled {
+  opacity: 0.55;
+}
+
+.dark .glass-btn {
+  background: linear-gradient(
+    145deg,
+    rgba(200, 126, 69, 0.95) 0%,
+    rgba(123, 79, 50, 0.98) 100%
+  );
+}
+
+.glass-metric__value {
+  font-family: var(--font-serif), ui-serif, Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(2.5rem, 6vw, 3.25rem);
+  line-height: 1;
+  color: #3a1f10;
+}
+
+.dark .glass-metric__value {
+  color: #f0c898;
+}
+
+.glass-metric__label {
+  font-family: var(--font-ios);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.65;
 }
 
 /* ─── Блок «Обо мне» ───────────────────────────────────── */

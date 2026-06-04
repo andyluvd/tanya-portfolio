@@ -6,135 +6,100 @@
 portfolio/
 ├── src/
 │   ├── app/
-│   │   ├── page.jsx          ← собирает все секции по порядку
-│   │   ├── layout.jsx        ← meta, шрифты Google, ThemeProvider
-│   │   └── globals.css       ← CSS-переменные палитры, базовые стили
+│   │   ├── page.jsx
+│   │   ├── layout.jsx
+│   │   └── globals.css       ← glass, section-*, service-card
 │   ├── components/
-│   │   ├── ScrollToTop.jsx          ← скролл вверх при F5
+│   │   ├── ScrollToTop.jsx
 │   │   ├── sections/
-│   │   │   ├── IntroSection.jsx     ← интро: пилюля + фото + About (client)
-│   │   │   ├── AboutSection.jsx     ← AboutContent (glass-карточка)
+│   │   │   ├── IntroSection.jsx
+│   │   │   ├── AboutSection.jsx
 │   │   │   ├── ServicesSection.jsx
 │   │   │   ├── CasesSection.jsx
 │   │   │   ├── SkillsSection.jsx
 │   │   │   └── ContactSection.jsx
 │   │   ├── ui/
-│   │   │   ├── ServiceCard.jsx      ← карточка услуги с hover
-│   │   │   ├── MetricCounter.jsx    ← анимированный счётчик цифр
-│   │   │   ├── AnimatedSection.jsx  ← обёртка fade-in при скролле
-│   │   │   └── ThemeToggle.jsx      ← переключатель светлой/тёмной темы
+│   │   │   ├── ServiceCard.jsx
+│   │   │   ├── SectionHeading.jsx
+│   │   │   ├── MetricCounter.jsx
+│   │   │   ├── AnimatedSection.jsx
+│   │   │   └── ThemeToggle.jsx
 │   │   └── layout/
-│   │       ├── Footer.jsx           ← контакты, ThemeToggle
+│   │       ├── Footer.jsx
 │   │       └── FooterThemeToggle.jsx
 │   ├── lib/
-│   │   ├── utils.js                 ← вспомогательные функции
-│   │   └── emailjs.js               ← конфиг EmailJS для формы
-│   ├── content/
-│   │   └── data.js                  ← ВСЕ тексты и данные страницы
-│   └── styles/
-│       └── tokens.css               ← CSS-переменные (дублирует globals для ясности)
-├── docs/                            ← контекст для Cursor AI
-│   ├── PROJECT_OVERVIEW.md
-│   ├── ARCHITECTURE.md
-│   ├── TECH_STACK.md
-│   └── CURRENT_STATUS.md
+│   │   ├── servicesScrollProgress.js  ← glow от центра viewport
+│   │   ├── utils.js
+│   │   └── emailjs.js
+│   └── content/
+│       └── data.js
+├── docs/
 ├── public/
-│   ├── photo.jpg                    ← фото Татьяны (загрузить вручную)
-│   └── cases/
-│       └── lightstar-analytics.png  ← скриншот аналитики Pinterest
-├── next.config.js
-├── tailwind.config.js
-└── package.json
+│   ├── photo.jpg
+│   └── cases/lightstar-analytics.png  ← TODO
+└── …
 ```
 
 ## Компоненты — подробное описание
 
 ### `IntroSection.jsx` (client) — шапка ✅
-**Ответственность:** пилюля, sticky-фото, обёртка `#about` для `AboutContent`.
-**Пилюля:** `natural` (scroll=0) → `fixed` (scroll>0). Позиция `top` через `getFixedTop(aboutTop)`:
-- `aboutTop >= 88px` → `top: 16px` (прилипла)
-- зона 88→16px → линейная интерполяция (отлипание 1:1 со скроллом)
-- `aboutTop <= 16px` → `top: aboutTop` (едет с секцией, без режима `floating`)
-**Фото:** `.intro-photo` sticky + mask-gradient.
+Пилюля `natural` → `fixed`, `getFixedTop(aboutTop)`, sticky-фото с fade/noise по скроллу.
 
-### `AboutSection.jsx` → `AboutContent` — блок «Обо мне» ✅
-**Ответственность:** glass-карточка с текстом (без `<section>`, section — в `IntroSection`).
-**Типографика:** заголовок `.glass-panel__title` (Playfair italic, крупный); абзацы `.glass-ios-text` (как пилюля).
-**Анимация:** fade обёртки по `opacity`; абзацы — stagger. CTA убраны (будут позже).
+### `AboutSection.jsx` → `AboutContent` ✅
+Glass-карточка «Обо мне»; fade только `opacity` на обёртке.
 
-### Стили стекла (`globals.css`) — iOS frosted glass
+### Стили стекла (`globals.css`)
 | Класс | Назначение |
 |-------|------------|
-| `.intro-header__glass` | Пилюля |
-| `.glass-panel` | Карточка «Обо мне» |
-| `.glass-text-contrast` | Контраст текста на фото |
-| `.glass-ios-text` | SF Pro / system, 18–21px, weight 600 |
-| `.glass-panel__title` | Крупный italic заголовок |
-| Общее | `blur(28px) saturate(185%)`, градиентный блик `::before` |
+| `.intro-header__glass` | Пилюля (на фото) |
+| `.glass-panel` | Базовое стекло: blur, блик `::before` |
+| `.glass-card` / `.glass-pill` / `.glass-field` | Секции ниже intro |
+| `.glass-on-solid` | Текст без photo-shadow на кремовом фоне |
+| `.glass-ios-text` | SF Pro / system |
+| `.section-title` / `.section-eyebrow` | Заголовки секций (Playfair italic) |
+| Параметры | `blur(12px)`, лёгкая прозрачная заливка |
 
-### `ScrollToTop.jsx`
-**Ответственность:** `history.scrollRestoration = 'manual'` + `scrollTo(0)` при загрузке; inline-script в `layout.jsx` до гидратации.
+### `ServicesSection.jsx` ✅
+**Ответственность:** сетка 4 услуг, **подсветка привязана к скроллу**.
+**Поток:**
+1. `gridRef` → `children[i].getBoundingClientRect()`
+2. `getCardGlowFromViewportCenter(rect, vh)` → `glows[i]` ∈ [0, 1]
+3. `requestAnimationFrame` на `scroll` / `resize`
+**Нет:** hover, таймеров, `whileInView` stagger для glow.
 
-### `ServicesSection.jsx`
-**Ответственность:** 4 услуги в виде карточек.
-**Макет:** CSS Grid 2×2, на мобиле 1×4.
-**Данные (из `content/data.js`):**
+### `servicesScrollProgress.js`
 ```js
-[
-  { icon: 'strategy', title: 'Стратегия и контент-план', desc: 'Цели, форматы, рубрики, тексты' },
-  { icon: 'analytics', title: 'Аналитика и рост', desc: 'Метрики, оптимизация, результат' },
-  { icon: 'video', title: 'Видео и Reels', desc: 'Монтаж коротких видео под бизнес-задачи' },
-  { icon: 'visual', title: 'Визуал и оформление', desc: 'Лента, сторис, рилсы' },
-]
+// Центр карточки совпадает с центром экрана → glow = 1
+// Дальше от центра (вверх или вниз) → smoothstep к 0
+getCardGlowFromViewportCenter(rect, vh)
 ```
-**Hover:** карточки через `ServiceCard` (translateY, accent border, линия сверху).
 
-### `ServiceCard.jsx`
-**Ответственность:** одна карточка услуги.
-**Props:** `{ icon, title, desc }`.
-**Иконки:** `Target`, `TrendingUp`, `Clapperboard`, `Palette` (Lucide).
-**Hover:** скруглённый квадрат иконки → заливка accent, rotate, top accent line.
+### `ServiceCard.jsx` ✅
+**Props:** `{ icon, title, desc, glow?: number }` — `glow` 0…1.
+**Визуал:** `bg-surface`, serif title, accent hover-цвета через интерполяцию `glow`.
+**Анимация:** `motion.div` + `style={…}` (без `transition` delay — 1:1 со скроллом).
+**Эффекты при glow=1:** border accent, shadow, top line, icon fill, `y: -6px`.
 
-### `CasesSection.jsx`
-**Ответственность:** демонстрация реального результата (кейс Lightstar Pinterest).
-**Макет:** левый столбец — метрики, правый — скриншот аналитики.
-**Метрики (анимируются при появлении через `MetricCounter`):**
-- 11 800 — показов в месяц
-- 363 — вовлечений
-- 37 — сохранений
-- 7 500 — общая аудитория
-**Анимация метрик:** счётчик от 0 до финального значения за 1.5s, easing ease-out. Запускается один раз при `useInView`.
+### `SectionHeading.jsx`
+Eyebrow + Playfair title + optional subtitle; fade при `whileInView`.
+
+### `CasesSection.jsx` / `SkillsSection.jsx` / `ContactSection.jsx`
+Glass-карточки, `SectionHeading`, stagger opacity (без transform на glass).
 
 ### `MetricCounter.jsx`
-**Ответственность:** анимированный числовой счётчик.
-**Props:** `{ value: number, label: string, suffix?: string }`.
-**Логика:** `useEffect` + `requestAnimationFrame`, интерполяция от 0 до `value`.
+Счётчик 0→value при `useInView`; стили `.glass-metric__*`.
 
-### `SkillsSection.jsx`
-**Ответственность:** инструменты и технологии.
-**Контент:** Figma (SVG), Adobe-бейджи Ai/Ps/Pr, CapCut, теги AI и платформ.
-**Анимация:** stagger при скролле.
+### `Footer.jsx`
+Имя курсивом, контакты в `glass-pill`.
 
-### `ContactSection.jsx`
-**Ответственность:** финальный призыв к действию + форма.
-**Контент:** три кнопки-ссылки (телефон, Telegram, email) + форма (имя + сообщение).
-**Форма:** отправка через EmailJS без бэкенда. После отправки — inline-сообщение об успехе, без перезагрузки.
-
-### `AnimatedSection.jsx`
-**Ответственность:** обёртка для анимации появления при скролле.
-**Props:** `{ children, delay?: number, direction?: 'up' | 'left' | 'right' }`.
-**Использование:** оборачивает любой блок для автоматического fadeIn + slide при попадании в viewport.
-
-### `ThemeToggle.jsx`
-**Ответственность:** переключатель тёмной/светлой темы.
-**Реализация:** `next-themes`, иконка солнца/луны через Lucide.
+### `ScrollToTop.jsx`
+`scrollRestoration = manual`, scroll to top on load.
 
 ## Поток данных
-Все тексты и статичные данные живут в `src/content/data.js`. Компоненты импортируют нужные объекты оттуда. Никаких пропов сверху вниз через page.jsx — каждая секция сама берёт свои данные.
+Тексты в `src/content/data.js`. Секции импортируют данные сами.
 
-## Анимации — общие правила
-- Библиотека: Framer Motion (`motion.div`, `useInView`, `useAnimation`)
-- Базовый вариант появления: `{ opacity: 0, y: 24 }` → `{ opacity: 1, y: 0 }`, duration 0.5s
-- Stagger между дочерними элементами: 0.12–0.15s
-- Все анимации запускаются один раз (`once: true` в `useInView`)
-- `@media (prefers-reduced-motion)`: все анимации отключаются через Framer Motion `reducedMotion: "user"`
+## Анимации — правила
+- **Услуги:** scroll progress = `glow`, не Framer `animate` с duration
+- **Секции:** Framer fade/stagger по opacity где нет `backdrop-filter` на том же node
+- **Intro glass:** не вешать `transform` на элемент с `backdrop-filter`
+- `prefers-reduced-motion`: учитывать при расширении (услуги пока без отдельной ветки)

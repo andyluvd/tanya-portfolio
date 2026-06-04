@@ -6,20 +6,22 @@ export default function Footer() {
   const currentYear = new Date().getFullYear()
 
   return (
-    <footer className="border-t border-[var(--color-border)] bg-[var(--color-surface)] py-10 mt-0">
+    <footer className="border-t border-[var(--color-border)]/60 bg-[var(--color-bg)] py-10 mt-0">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-          <div>
-            <p className="font-serif text-lg font-semibold text-[var(--color-text)]">
+          <div className="text-center md:text-left">
+            <p className="section-title text-[clamp(1.5rem,4vw,2rem)] glass-text-contrast">
               {siteData.name}
             </p>
-            <p className="text-sm text-[var(--color-muted)] mt-1">{siteData.role} · {siteData.niche}</p>
+            <p className="glass-panel__body glass-ios-text text-sm mt-1 opacity-75">
+              {siteData.role} · {siteData.niche}
+            </p>
           </div>
 
-          <div className="flex items-center gap-6 flex-wrap justify-center">
+          <div className="flex items-center gap-4 sm:gap-6 flex-wrap justify-center">
             <a
               href={`tel:${siteData.contacts.phone}`}
-              className="flex items-center gap-2 text-sm text-[var(--color-muted)] hover:text-[var(--color-accent)] transition-colors"
+              className="glass-panel glass-pill glass-on-solid glass-text-contrast glass-ios-text text-sm font-medium px-4 py-2.5 flex items-center gap-2 hover:opacity-90 transition-opacity"
             >
               <Phone size={15} />
               <span>{siteData.contacts.phone}</span>
@@ -28,14 +30,14 @@ export default function Footer() {
               href={siteData.contacts.telegram}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 text-sm text-[var(--color-muted)] hover:text-[var(--color-accent)] transition-colors"
+              className="glass-panel glass-pill glass-on-solid glass-text-contrast glass-ios-text text-sm font-medium px-4 py-2.5 flex items-center gap-2 hover:opacity-90 transition-opacity"
             >
               <Send size={15} />
               <span>Telegram</span>
             </a>
             <a
               href={`mailto:${siteData.contacts.email}`}
-              className="flex items-center gap-2 text-sm text-[var(--color-muted)] hover:text-[var(--color-accent)] transition-colors"
+              className="glass-panel glass-pill glass-on-solid glass-text-contrast glass-ios-text text-sm font-medium px-4 py-2.5 flex items-center gap-2 hover:opacity-90 transition-opacity"
             >
               <Mail size={15} />
               <span>Email</span>
@@ -44,8 +46,8 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="mt-8 pt-6 border-t border-[var(--color-border)] text-center">
-          <p className="text-xs text-[var(--color-muted)]">
+        <div className="mt-8 pt-6 border-t border-[var(--color-border)]/50 text-center">
+          <p className="glass-panel__body glass-ios-text text-xs opacity-60">
             © {currentYear} {siteData.name}. Все права защищены.
           </p>
         </div>
