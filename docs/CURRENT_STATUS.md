@@ -1,112 +1,137 @@
 # Current Status
 
 ## Текущий этап
-**Этап 2 — Hero + About** (в процессе)
+**Этап 2 — Hero + About** (завершён ✅)
 
-Реализован новый интро-блок: фото на всю ширину в натуральных пропорциях, под ним стеклянная карточка «Обо мне», при скролле карточка наезжает на закреплённое фото. Остальные секции (Services, Cases, Skills, Contact) — базовая вёрстка с этапа 1.
-
----
-
-## Этапы реализации
-
-### Этап 1 — Фундамент
-**Статус:** завершён ✅
-
-**Задачи:**
-- [x] Создать проект (вручную, без create-next-app)
-- [x] Установить зависимости (framer-motion, next-themes@0.4.4, lucide-react, emailjs)
-- [x] Прописать CSS-переменные палитры в `globals.css`
-- [x] Подключить шрифты Playfair Display + Inter через `next/font/google`
-- [x] Сделать `Navbar` и `Footer`
-- [x] Настроить `tailwind.config.js`
-- [x] Создать все секции и UI-компоненты
-- [x] `npm run build` — успешно
+Интро-блок полностью реализован: фото на всю ширину, стеклянная пилюля с именем, glassmorphism-карточка «Обо мне».
 
 ---
 
-### Этап 2 — Hero + About
-**Статус:** в процессе
+## Что сделано (полная история)
 
-**Задачи:**
-- [x] Добавить фото (`public/photo.jpg`)
-- [x] `HeroSection`: фото `w-full h-auto`, без кропа на весь экран
-- [x] `Navbar`: плавающая пилюля (тема + меню), без шапки с именем
-- [x] `AboutSection`: карточка уже фото, glassmorphism (`backdrop-blur`)
-- [x] Sticky-фото + наезд карточки при скролле (`.intro-photo` / `.intro-about`)
-- [x] Новый текст «Обо мне» с акцентными словами (гармонии, всегда, вдохновляюсь)
-- [x] Читаемые цвета текста на светлом стекле
-- [ ] Доработать эффект на мобиле / тонкая настройка отступов
-- [ ] Проверить тёмную тему на интро-блоке
+### Этап 1 — Фундамент ✅
+- Next.js 15, React 19, Tailwind CSS 3, Framer Motion 11
+- Все секции и UI-компоненты созданы
+- CSS-переменные палитры, шрифты Playfair Display + Inter
+- `npm run build` — успешно
 
-**Результат этапа:** первый экран с фото и «летающей» карточкой при скролле.
+### Этап 2 — Hero + About ✅
+- **Фото** (`public/photo.jpg`): `w-full h-auto`, sticky при скролле, нижний край плавно растворяется через CSS mask
+- **Пилюля «Золотарёва Татьяна»** — три состояния через JS (`IntroSection.jsx`):
+  1. `natural` — в потоке выше фото (scroll = 0)
+  2. `fixed` — `position: fixed; top: 16px` при скролле над фото
+  3. `floating` — первый элемент блока «Обо мне», уезжает вместе с ним
+- **Блок «Обо мне»** — glassmorphism-карточка (`backdrop-blur-xl`, `bg-white/80`), текст с акцентными словами, Framer Motion stagger
+- **Navbar** — убран, переключатель темы перенесён в Footer
 
----
+### Этап 3 — Services + Skills (базовая вёрстка) ✅
+- `ServiceCard` + `ServicesSection` (сетка 2×2)
+- `SkillsSection` с тегами инструментов и AI
+- Нужна доработка: визуал, иконки, анимации
 
-### Этап 3 — Services + Skills
-**Статус:** не начат (базовая вёрстка есть)
+### Этап 4 — Cases (базовая вёрстка) ✅
+- `MetricCounter` + `CasesSection` (метрики + скриншот)
+- Нужно: добавить `public/cases/lightstar-analytics.png`
 
-**Задачи:**
-- [x] `ServiceCard` и `ServicesSection` (сетка 2×2)
-- [x] `SkillsSection` с тегами инструментов
-- [ ] Доработать hover и анимации по макету
-- [ ] Иконки Adobe / видео (SVG)
-
----
-
-### Этап 4 — Cases
-**Статус:** не начат (базовая вёрстка есть)
-
-**Задачи:**
-- [x] `MetricCounter` и `CasesSection`
-- [ ] Добавить скриншот `public/cases/lightstar-analytics.png`
-- [ ] Проверить счётчики на реальных данных
+### Этап 5 — Contact + Деплой (частично) ✅
+- `ContactSection` (кнопки + форма)
+- GitHub: https://github.com/andyluvd/tanya-portfolio
+- VDS: http://109.172.94.218/ (SSH: `vds-portfolio`)
+- Нужно: ключи EmailJS, тест отправки формы
 
 ---
 
-### Этап 5 — Contact + Деплой
-**Статус:** в процессе
+## Файловая структура (актуальная)
 
-**Задачи:**
-- [x] `ContactSection` (кнопки + форма)
-- [x] SEO-мета в `layout.jsx`
-- [x] Репозиторий GitHub: https://github.com/andyluvd/tanya-portfolio
-- [x] Деплой на VDS (`109.172.94.218`, `/var/www/tanya`)
-- [x] Скрипт `./scripts/deploy-vds.sh`
-- [ ] Ключи EmailJS в `src/lib/emailjs.js`
-- [ ] Протестировать отправку формы
-- [ ] Деплой на Vercel (опционально)
-- [ ] Проверить на реальном телефоне
+```
+src/
+├── app/
+│   ├── page.jsx          ← только импорты секций
+│   ├── layout.jsx        ← ThemeProviders, Footer
+│   └── globals.css       ← CSS-переменные, .intro-* классы
+├── components/
+│   ├── sections/
+│   │   ├── IntroSection.jsx     ← CLIENT: пилюля + фото + About, JS-машина состояний
+│   │   ├── AboutSection.jsx     ← AboutContent (без section-обёртки)
+│   │   ├── ServicesSection.jsx
+│   │   ├── CasesSection.jsx
+│   │   ├── SkillsSection.jsx
+│   │   └── ContactSection.jsx
+│   ├── ui/
+│   │   ├── ServiceCard.jsx
+│   │   ├── MetricCounter.jsx
+│   │   ├── AnimatedSection.jsx
+│   │   └── ThemeToggle.jsx
+│   ├── layout/
+│   │   ├── Footer.jsx
+│   │   ├── FooterThemeToggle.jsx
+│   │   └── IntroHeader.jsx      ← не используется, можно удалить
+│   └── providers/
+│       └── ThemeProviders.jsx   ← 'use client' обёртка для next-themes
+├── lib/
+│   ├── utils.js
+│   └── emailjs.js               ← ЗАПОЛНИТЬ ключи!
+├── content/
+│   └── data.js                  ← все тексты и данные
+└── styles/
+    └── tokens.css
+public/
+├── photo.jpg                    ← фото Татьяны ✅
+└── cases/
+    └── lightstar-analytics.png  ← НЕ ЗАГРУЖЕНО
+```
 
 ---
 
 ## Деплой
 
-| Среда | URL / доступ |
-|--------|----------------|
-| Локально | `npm run dev` → http://127.0.0.1:3000 |
-| VDS | http://109.172.94.218/ (SSH: `vds-portfolio`) |
+| Среда | Адрес |
+|-------|-------|
+| Локально | `npm run dev` → http://localhost:3000 |
+| VDS | http://109.172.94.218/ |
 | GitHub | https://github.com/andyluvd/tanya-portfolio |
 
+**Деплой на VDS:** `rsync -avz --delete out/ vds-portfolio:/var/www/tanya/`  
+**npm путь (Mac):** `export PATH="/Users/andre/ОФЛАЙН/1project/.tools/node/bin:$PATH"`
+
 **Точки отката (git):**
-- `8c992f6` — initial commit
-- `83b39c7` — fullscreen hero + glassmorphism (первая версия интро)
+| Хеш | Описание |
+|-----|----------|
+| `8c992f6` | Initial commit |
+| `83b39c7` | Fullscreen hero + glassmorphism v1 |
+| `d1fa71c` | Glass header + sticky photo v1 |
+| `35f0684` | ✅ ТЕКУЩИЙ: пилюля JS state machine |
 
 ---
 
-## Известные решения и договорённости
-- JavaScript, не TypeScript
-- Тексты в `src/content/data.js`; интро-текст «Обо мне» пока в `AboutSection.jsx`
-- Тёмная тема: `next-themes`, `attribute="class"`
-- Статический экспорт (`output: 'export'`) — деплой как статика на VDS
-- Nginx: `index.html` без кэша, `_next/static` с long cache
+## Что делать дальше
+
+### Приоритет 1 — Контент и медиа
+- [ ] Загрузить `public/cases/lightstar-analytics.png`
+- [ ] Зарегистрироваться на emailjs.com, вписать ключи в `src/lib/emailjs.js`
+- [ ] Проверить форму контактов
+
+### Приоритет 2 — Доработка секций
+- [ ] ServicesSection: улучшить иконки, hover-эффекты
+- [ ] CasesSection: добавить скриншот, проверить счётчики
+- [ ] SkillsSection: добавить SVG-иконки Figma, Adobe
+
+### Приоритет 3 — Финальная полировка
+- [ ] Проверить тёмную тему на всех секциях
+- [ ] Адаптивность: проверить на реальном телефоне
+- [ ] SEO: meta-теги в `layout.jsx` (уже базово настроено)
+- [ ] Деплой на Vercel (опционально)
+
+---
+
+## Известные решения
+
+- `IntroSection.jsx` — клиентский компонент, управляет тремя состояниями пилюли через `getBoundingClientRect()`
+- `AboutSection.jsx` (`export default function AboutContent`) — без section-обёртки, section предоставляет `IntroSection`
+- Тёмная тема: `next-themes` с `attribute="class"`, без мигания
+- Статический экспорт: `output: 'export'` в `next.config.js`
+- `npm run dev:clean` — запуск с очисткой кэша `.next`
 
 ## Баги и блокеры
-- `npm run dev` без `-H 127.0.0.1` может падать с `uv_interface_addresses` в sandbox — в `package.json` зафиксирован хост
-- После деплоя на VDS может понадобиться жёсткое обновление страницы (Cmd+Shift+R)
-
----
-
-## Как обновлять этот файл
-1. Ставь `[x]` вместо `[ ]`
-2. Меняй статус этапа
-3. Добавляй баги и новые commit-хеши для отката
+- `IntroHeader.jsx` в `src/components/layout/` — остался, не используется, можно удалить
+- Переключатель темы только в Footer (внизу страницы) — возможно стоит добавить где-то вверху

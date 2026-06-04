@@ -43,7 +43,7 @@
 - Заголовки: `Playfair Display` (serif, Google Fonts) — элегантность
 - Текст: `Inter` (sans-serif, Google Fonts) — читаемость
 
-## Контактные данные (из портфолио)
+## Контактные данные
 - Телефон: +7 995 300-67-27
 - Telegram: @tanyaaaa1111
 - Email: zolotarevatana85@gmail.com
@@ -51,3 +51,7 @@
 ## SEO-мета
 - Title: `Татьяна Золотарева — SMM-специалист | Освещение и интерьер`
 - Description: `Контент-стратегия, видео, аналитика и визуальный стиль для брендов в нише освещения и интерьера. Кейс: Pinterest Lightstar — 11.8K показов в месяц.`
+
+## Текущий URL
+- VDS: http://109.172.94.218/
+- GitHub: https://github.com/andyluvd/tanya-portfolio
