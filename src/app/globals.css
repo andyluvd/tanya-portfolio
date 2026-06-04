@@ -38,6 +38,19 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
+/* Фото липнет сверху, блок «Обо мне» наезжает поверх при скролле */
+.intro-photo {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  z-index: 0;
+}
+
+.intro-about {
+  position: relative;
+  z-index: 10;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

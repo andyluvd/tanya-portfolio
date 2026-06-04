@@ -2,17 +2,16 @@ import Image from 'next/image'
 
 export default function HeroSection() {
   return (
-    <section className="relative h-screen w-full overflow-hidden">
+    <div className="intro-photo w-full">
       <Image
         src="/photo.jpg"
         alt="Татьяна Золотарева"
-        fill
-        className="object-cover object-top"
+        width={640}
+        height={640}
+        className="block w-full h-auto"
         priority
         sizes="100vw"
       />
-      {/* Gradient at the bottom — smooth transition into the glass about section */}
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/40 pointer-events-none" />
-    </section>
+    </div>
   )
 }

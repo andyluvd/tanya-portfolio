@@ -22,19 +22,29 @@ function Spaced({ children }) {
 
 export default function AboutSection() {
   return (
-    <section
-      id="about"
-      className="relative z-10 -mt-[38vh]"
-    >
-      {/* Glass card — overlaps the photo */}
-      <div className="backdrop-blur-2xl bg-white/10 dark:bg-black/20 border-t border-x border-white/20 rounded-t-[44px] shadow-[0_-8px_60px_rgba(0,0,0,0.18)] px-6 sm:px-10 pt-14 pb-0">
-        <div className="max-w-2xl mx-auto">
+    <section id="about" className="intro-about">
+      <div className="px-5 sm:px-10 md:px-14 pt-8 pb-6">
+        <motion.div
+          initial={{ opacity: 0, y: 32 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-40px' }}
+          transition={{ duration: 0.7, ease: 'easeOut' }}
+          className={[
+            'mx-auto max-w-xl',
+            'backdrop-blur-xl',
+            'bg-white/80 dark:bg-black/55',
+            'border border-[var(--color-border)]',
+            'rounded-[28px]',
+            'shadow-[0_12px_48px_rgba(0,0,0,0.15)]',
+            'px-6 sm:px-9 pt-9 pb-11',
+          ].join(' ')}
+        >
           <motion.p
             variants={fadeUp}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
-            className="text-xs font-semibold uppercase tracking-[0.25em] text-white/70 dark:text-white/60 mb-10"
+            className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--color-accent)] mb-7"
           >
             Обо мне
           </motion.p>
@@ -43,36 +53,35 @@ export default function AboutSection() {
             variants={stagger}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: '-60px' }}
-            className="flex flex-col gap-7"
+            viewport={{ once: true, margin: '-40px' }}
+            className="flex flex-col gap-5"
           >
-            <motion.p variants={fadeUp} className="text-lg md:text-xl leading-[1.85] text-white dark:text-white/90 font-light">
+            <motion.p variants={fadeUp} className="text-[15px] sm:text-base leading-[1.9] text-[var(--color-text)] font-light">
               Творческая и внимательная к деталям личность,
               обладаю развитым эстетическим вкусом, стремлюсь
               к&nbsp;<Spaced>гармонии</Spaced>&nbsp;в визуальных решениях
               и&nbsp;<Spaced>всегда</Spaced>&nbsp;открыта к новым идеям.
             </motion.p>
 
-            <motion.p variants={fadeUp} className="text-lg md:text-xl leading-[1.85] text-white dark:text-white/90 font-light">
+            <motion.p variants={fadeUp} className="text-[15px] sm:text-base leading-[1.9] text-[var(--color-text)] font-light">
               Внимательна к трендам, но при этом ценю
               индивидуальность и уникальный стиль в дизайне.
             </motion.p>
 
-            <motion.p variants={fadeUp} className="text-lg md:text-xl leading-[1.85] text-white dark:text-white/90 font-light">
+            <motion.p variants={fadeUp} className="text-[15px] sm:text-base leading-[1.9] text-[var(--color-text)] font-light">
               Ответственна, организованна и умею работать
               в сжатые сроки без потери качества.
             </motion.p>
 
-            <motion.p variants={fadeUp} className="text-lg md:text-xl leading-[1.85] text-white dark:text-white/90 font-light pb-14">
+            <motion.p variants={fadeUp} className="text-[15px] sm:text-base leading-[1.9] text-[var(--color-text)] font-light">
               Стремлюсь к постоянному развитию, осваиваю
               новые инструменты и&nbsp;<Spaced>вдохновляюсь</Spaced>&nbsp;искусством.
             </motion.p>
           </motion.div>
-        </div>
+        </motion.div>
       </div>
 
-      {/* Solid background continues the page below the glass section */}
-      <div className="bg-[var(--color-bg)]" />
+      <div className="bg-[var(--color-bg)] min-h-[40vh]" />
     </section>
   )
 }
