@@ -101,7 +101,7 @@ npm run build && rsync -avz --delete out/ vds-portfolio:/var/www/tanya/
 | Хеш | Описание |
 |-----|----------|
 | `35f0684` | Пилюля JS state machine |
-| `9a88c9f` | ✅ ТЕКУЩИЙ: стекло intro, полировка секций, docs |
+| `c73200e` | ✅ ТЕКУЩИЙ: стекло intro, полировка секций, docs |
 
 ---
 
