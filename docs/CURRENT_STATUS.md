@@ -92,7 +92,8 @@ npm run build && rsync -avz --delete out/ vds-portfolio:/var/www/tanya/
 | Хеш | Описание |
 |-----|----------|
 | `2249558` | Шапка + «Обо мне» готовы |
-| `24dc784` | ✅ Секции в стекле + услуги scroll-glow |
+| `24dc784` | Секции в стекле + услуги scroll-glow |
+| `4b5dffb` | ✅ Единое iOS-стекло всех карточек |
 
 ---
 
