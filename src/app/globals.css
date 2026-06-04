@@ -38,9 +38,8 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Фото — вторая строка сетки, липнет при скролле */
+/* Фото липнет при скролле — находится под overlay */
 .intro-photo {
-  grid-row: 2;
   position: -webkit-sticky;
   position: sticky;
   top: 0;
@@ -69,32 +68,45 @@ body {
   );
 }
 
-/* Сетка: шапка → фото → «Обо мне»; шапка и about — один z-слой при скролле */
-.intro-layout {
-  display: grid;
-  grid-template-rows: auto auto auto;
-}
-
-.intro-scroll {
-  display: contents;
-}
-
-/* Только стеклянная «пилюля» с именем — первая строка, над фото */
-.intro-header {
-  grid-row: 1;
+/*
+  Overlay поверх фото: margin-top: -100vw поднимает к началу фото.
+  Содержит: [пилюля sticky] + [прозрачный spacer = высота фото] + [About]
+*/
+.intro-overlay {
   position: relative;
   z-index: 10;
+  margin-top: -100vw;
+}
+
+/* Пилюля прилипает при скролле и отлипает когда About доезжает до неё */
+.intro-header {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 1rem;
+  z-index: 20;
   display: flex;
   justify-content: center;
-  padding: 1rem 1.25rem 0.75rem;
+  padding: 0.75rem 1.25rem;
+  pointer-events: none;
+}
+
+.intro-header__glass {
+  pointer-events: auto;
+}
+
+/* Прозрачная зона: занимает место фото, фото просвечивает снизу */
+.intro-spacer {
+  width: 100%;
+  height: calc(100vw - 4.5rem); /* 100vw минус высота пилюли */
+  pointer-events: none;
 }
 
 .intro-about-wrap {
-  grid-row: 3;
   position: relative;
   z-index: 10;
 }
 
+/* Стиль стеклянной пилюли */
 .intro-header__glass {
   display: inline-block;
   padding: 0.75rem 1.75rem;

@@ -9,12 +9,20 @@ import ContactSection from '@/components/sections/ContactSection'
 export default function Home() {
   return (
     <>
-      <div className="intro-layout">
-        <div className="intro-scroll">
+      <div className="relative">
+        {/* Фото липнет при скролле, уходит под overlay */}
+        <HeroSection />
+
+        {/*
+          Overlay стартует с позиции 0 (margin-top: -100vw тянет вверх).
+          Пилюля sticky: прилипает при скролле, отлипает когда блок «Обо мне»
+          поднимается до неё и уносит вместе с собой.
+        */}
+        <div className="intro-overlay">
           <IntroHeader />
+          <div className="intro-spacer" aria-hidden="true" />
           <AboutSection />
         </div>
-        <HeroSection />
       </div>
 
       <ServicesSection />
