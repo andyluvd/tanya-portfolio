@@ -11,8 +11,8 @@ portfolio/
 │   │   └── globals.css       ← CSS-переменные палитры, базовые стили
 │   ├── components/
 │   │   ├── sections/
-│   │   │   ├── HeroSection.jsx
-│   │   │   ├── AboutSection.jsx
+│   │   │   ├── IntroSection.jsx     ← интро: пилюля + фото + About (client)
+│   │   │   ├── AboutSection.jsx     ← AboutContent (glass-карточка)
 │   │   │   ├── ServicesSection.jsx
 │   │   │   ├── CasesSection.jsx
 │   │   │   ├── SkillsSection.jsx
@@ -23,8 +23,8 @@ portfolio/
 │   │   │   ├── AnimatedSection.jsx  ← обёртка fade-in при скролле
 │   │   │   └── ThemeToggle.jsx      ← переключатель светлой/тёмной темы
 │   │   └── layout/
-│   │       ├── Navbar.jsx           ← навигация + ThemeToggle
-│   │       └── Footer.jsx           ← контакты, копирайт
+│   │       ├── Footer.jsx           ← контакты, ThemeToggle
+│   │       └── FooterThemeToggle.jsx
 │   ├── lib/
 │   │   ├── utils.js                 ← вспомогательные функции
 │   │   └── emailjs.js               ← конфиг EmailJS для формы
@@ -48,28 +48,26 @@ portfolio/
 
 ## Компоненты — подробное описание
 
-### `Navbar.jsx`
-**Ответственность:** фиксированная навигация сверху, скрывается при скролле вниз, появляется при скролле вверх.
-**Содержит:** логотип/имя слева, ссылки-якоря (Обо мне, Услуги, Кейсы, Контакты), `ThemeToggle` справа.
-**Поведение:** `position: sticky`, `backdrop-filter` для полупрозрачности на светлой теме. На мобиле — бургер-меню.
+### `IntroSection.jsx` (client)
+**Ответственность:** весь интро-блок — пилюля, фото, секция «Обо мне».
+**Пилюля «Золотарёва Татьяна»:** три режима (`natural` | `fixed` | `floating`), переключение по scroll + `#about.getBoundingClientRect().top`.
+**Фото:** sticky (`intro-photo`), mask-gradient снизу.
+**Стекло пилюли:** `.intro-header__glass.glass-text-contrast` — см. `globals.css`.
 
-### `HeroSection.jsx`
-**Ответственность:** первый экран, максимальное впечатление за 3 секунды.
-**Макет:** два столбца. Левый — текст (имя h1, подзаголовок, описание, две CTA-кнопки). Правый — фото в декоративной рамке.
-**Анимации (Framer Motion):**
-- Имя: `fadeInUp` с задержкой 0.2s
-- Подзаголовок: `fadeInUp` с задержкой 0.4s
-- Кнопки: `fadeInUp` с задержкой 0.6s
-- Фото: `fadeIn` с задержкой 0.3s
-**CTA-кнопки:** «Написать в Telegram» (основная, акцентная), «Посмотреть кейсы» (вторичная, outline).
-**Фоновый декор:** SVG-паттерн с листьями (как в PDF), opacity 0.06 — едва заметный.
-**Props:** нет (данные из `content/data.js`).
+### `AboutSection.jsx` → `AboutContent`
+**Ответственность:** текст «Обо мне» внутри glass-карточки (без своей `<section>`).
+**Стекло:** `<div class="glass-panel glass-text-contrast">` — не на `motion.div` с transform.
+**Анимация:** обёртка только `opacity`; абзацы — stagger `fadeUp`.
+**CTA:** Telegram + якорь `#cases` (данные из `siteData`).
 
-### `AboutSection.jsx`
-**Ответственность:** личное представление, качества и ценности.
-**Макет:** текстовые абзацы появляются поочерёдно (stagger 0.15s) при попадании в зону видимости (`useInView` Framer Motion).
-**Контент:** 4 абзаца из PDF о творческом подходе, внимании к трендам, ответственности, постоянном развитии.
-**Визуальный акцент:** первая буква каждого абзаца увеличена (drop cap) в акцентном цвете.
+### Стили стекла (`globals.css`)
+| Класс | Назначение |
+|-------|------------|
+| `.intro-header__glass` | Пилюля, заливка ~28% white |
+| `.glass-panel` | Карточка «Обо мне», заливка ~32% white |
+| `.glass-text-contrast` | Цвет текста + text-shadow для читаемости на фото |
+| `.glass-accent` | Акцентные подписи внутри стекла |
+| Общее | `backdrop-filter: blur(4px) saturate(1.15)` |
 
 ### `ServicesSection.jsx`
 **Ответственность:** 4 услуги в виде карточек.
@@ -83,12 +81,13 @@ portfolio/
   { icon: 'visual', title: 'Визуал и оформление', desc: 'Лента, сторис, рилсы' },
 ]
 ```
-**Hover-эффект:** translateY(-4px) + усиление border-цвета. Через CSS transition, без JS.
+**Hover:** карточки через `ServiceCard` (translateY, accent border, линия сверху).
 
 ### `ServiceCard.jsx`
 **Ответственность:** одна карточка услуги.
 **Props:** `{ icon, title, desc }`.
-**Внешний вид:** белый фон (светлая тема) / surface (тёмная), border 0.5px, border-radius 12px, иконка сверху в акцентном круге.
+**Иконки:** `Target`, `TrendingUp`, `Clapperboard`, `Palette` (Lucide).
+**Hover:** скруглённый квадрат иконки → заливка accent, rotate, top accent line.
 
 ### `CasesSection.jsx`
 **Ответственность:** демонстрация реального результата (кейс Lightstar Pinterest).
@@ -107,8 +106,8 @@ portfolio/
 
 ### `SkillsSection.jsx`
 **Ответственность:** инструменты и технологии.
-**Контент:** логотипы Figma (через SVG), Adobe Illustrator, Photoshop + текстовые теги нейросетей (Midjourney, ChatGPT, Runway).
-**Анимация:** иконки появляются с stagger при скролле.
+**Контент:** Figma (SVG), Adobe-бейджи Ai/Ps/Pr, CapCut, теги AI и платформ.
+**Анимация:** stagger при скролле.
 
 ### `ContactSection.jsx`
 **Ответственность:** финальный призыв к действию + форма.

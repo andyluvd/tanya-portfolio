@@ -20,9 +20,9 @@ const TOP = 16 // px = 1rem
 function GlassPill() {
   return (
     <div className="intro-header">
-      <span className="intro-header__glass font-serif text-base sm:text-lg font-semibold text-[var(--color-text)] tracking-wide whitespace-nowrap">
+      <div className="intro-header__glass glass-text-contrast font-serif text-base sm:text-lg tracking-wide whitespace-nowrap">
         Золотарёва Татьяна
-      </span>
+      </div>
     </div>
   )
 }
@@ -74,9 +74,9 @@ export default function IntroSection() {
       */}
       {mode === 'fixed' && (
         <div className="intro-header intro-header--fixed">
-          <span className="intro-header__glass font-serif text-base sm:text-lg font-semibold text-[var(--color-text)] tracking-wide whitespace-nowrap">
+          <div className="intro-header__glass glass-text-contrast font-serif text-base sm:text-lg tracking-wide whitespace-nowrap">
             Золотарёва Татьяна
-          </span>
+          </div>
         </div>
       )}
 
